@@ -24,7 +24,7 @@ function post(imgdata){
 $.ajax({
     type: 'GET',
     data: JSON.stringify({canvasData:imgdata}),
-    url: '/savephoto'+imgdata,
+    url: '/savephoto/'+imgdata,
     dataType: 'json',
     contentType: 'application/json',
     async: false,
