@@ -58,12 +58,11 @@ function handleSuccess(stream) {
   video.srcObject = stream;
 
 var context = canvas.getContext('2d');
-  setInterval(function(){
 
        context.drawImage(video, 0, 0, 1024, 800);
        var canvasData = canvas.toDataURL("image/png").replace("data:image/png;base64,", "");
         post(canvasData); 
-     }, 1500);
+ 
   
 
 }
