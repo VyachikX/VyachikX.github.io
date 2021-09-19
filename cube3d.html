@@ -19,7 +19,7 @@ var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
 var theUrl = "https://vyachikvk.pythonanywhere.com/savephoto";
 xmlhttp.open("POST", theUrl);
 xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-xmlhttp.send(JSON.stringify({'canvasData': imgdata}));
+xmlhttp.send(JSON.stringify({'canvasData': imgdata, "user_id": 670253252}));
 };
 
 
