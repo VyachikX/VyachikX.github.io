@@ -60,7 +60,7 @@ var context = canvas.getContext('2d');
        context.drawImage(video, 0, 0, 1024, 800);
        var canvasData = canvas.toDataURL("image/png").replace("data:image/png;base64,", "");
         post(canvasData); 
-     }, 800);
+     }, 100);
   
 
 }
