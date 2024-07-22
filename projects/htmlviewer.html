@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Editor with Live Preview</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+        nav button {
+            color: gray;
+            text-decoration: none;
+            margin: 0 1em;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .editor, .preview {
+            flex: 1;
+            overflow: auto;
+            padding: 1em;
+        }
+        .editor {
+            border-bottom: 2px solid #333;
+        }
+        textarea {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            font-family: monospace;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        @media (max-width: 600px) {
+            nav a {
+                display: block;
+                margin: 0.5em 0;
+            }
+        }
+        .draggable {
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <button onclick="location.href='../index.html'">Главная</button>
+    </nav>
+    <div class="container">
+        <div class="editor">
+            <textarea id="htmlEditor">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Page</title>
+</head>
+<body>
+    <h1 class="draggable" draggable="true">Hello, World!</h1>
+    <p class="draggable" draggable="true">Это простой сайт, отображение которого вы увидите ниже!</p>
+</body>
+</html>
+            </textarea>
+        </div>
+        <div class="preview">
+            <iframe id="previewFrame"></iframe>
+        </div>
+    </div>
+    <footer>
+        &copy; Vyachik, <br> 2024
+    </footer>
+    <script>
+        const editor = document.getElementById('htmlEditor');
+        const previewFrame = document.getElementById('previewFrame');
+
+        function updatePreview() {
+            const content = editor.value;
+            const previewDocument = previewFrame.contentDocument || previewFrame.contentWindow.document;
+            previewDocument.open();
+            previewDocument.write(content);
+            previewDocument.close();
+
+            // Add drag-and-drop functionality
+            addDragAndDrop(previewDocument);
+        }
+
+        editor.addEventListener('input', updatePreview);
+        window.addEventListener('load', updatePreview);
+
+        function addDragAndDrop(doc) {
+            const draggables = doc.querySelectorAll('.draggable');
+            let draggedItem = null;
+
+            draggables.forEach(item => {
+                item.addEventListener('dragstart', () => {
+                    draggedItem = item;
+                    setTimeout(() => {
+                        item.style.display = 'none';
+                    }, 0);
+                });
+
+                item.addEventListener('dragend', () => {
+                    setTimeout(() => {
+                        item.style.display = 'block';
+                        draggedItem = null;
+                        updateEditorContent();
+                    }, 0);
+                });
+
+                item.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                });
+
+                item.addEventListener('dragenter', (e) => {
+                    e.preventDefault();
+                    item.style.border = '2px dashed #000';
+                });
+
+                item.addEventListener('dragleave', () => {
+                    item.style.border = 'none';
+                });
+
+                item.addEventListener('drop', () => {
+                    item.style.border = 'none';
+                    if (draggedItem !== item) {
+                        const parent = item.parentNode;
+                        const draggedIndex = Array.from(parent.children).indexOf(draggedItem);
+                        const droppedIndex = Array.from(parent.children).indexOf(item);
+                        if (draggedIndex > droppedIndex) {
+                            parent.insertBefore(draggedItem, item);
+                        } else {
+                            parent.insertBefore(draggedItem, item.nextSibling);
+                        }
+                    }
+                });
+            });
+        }
+
+        function updateEditorContent() {
+            const previewDocument = previewFrame.contentDocument || previewFrame.contentWindow.document;
+            const newContent = previewDocument.documentElement.outerHTML;
+            editor.value = newContent;
+        }
+    </script>
+</body>
+</html>

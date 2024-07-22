@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        body, html {
+            margin: 8px;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #333;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            overflow: auto;
+        }
+        nav {
+            width: 100%;
+            text-align: center;
+            background-color: #222;
+            padding: 10px;
+            position: absolute;
+            top: 0;
+        }
+        nav button {
+            color: black;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background-color: #222;
+            padding: 10px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+        }
+        .neon-divider {
+            width: 2px;
+            background: linear-gradient(to bottom, #0f0, #ff0);
+            box-shadow: 0 0 10px #0f0, 0 0 20px #ff0, 0 0 30px #f00;
+        }
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            flex: 1;
+        }
+        .board {
+            display: grid;
+            gap: 5px;
+            border: 2px solid #0f0;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid #0f0;
+        }
+        .x { color: #00f; text-shadow: 0 0 10px #00f; }
+        .o { color: #f00; text-shadow: 0 0 10px #f00; }
+        .stats, .difficulty {
+            margin-top: 10px;
+            text-align: left;
+        }
+        .blink {
+            animation: blink-animation 1s steps(5, start) infinite;
+            -webkit-animation: blink-animation 1s steps(5, start) infinite;
+        }
+        @keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+        @-webkit-keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+        .analysis-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 15px;
+            flex: 1;
+        }
+        .analysis-result {
+            text-align: left;
+            max-width: 500px;
+            padding: 3px;
+            background-color: #222;
+            border-radius: 10px;
+            font-size: 12px;
+            height: 52vh;
+            display: none;
+        }
+        .neon-button {
+            color: black;
+            text-decoration: none;
+            font-size: 15px;
+            display: inline-block;
+            margin: 10px 0;
+            transition: all 0.2s;
+        }
+        .neon-button:hover {
+            color: #0f0;
+            box-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 15px #0f0, 0 0 20px #0f0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <button onclick="location.href='../index.html'">Главная</button>
+    </nav>
+    <h1><br>Крестики-нолики</h1>
+    <div class="container">
+        <div class="game-container">
+            <div class="difficulty">
+                <label for="difficulty">Выберите сложность: </label>
+                <select id="difficulty">
+                    <option value="easy">Легкий</option>
+                    <option value="medium">Средний</option>
+                    <option value="hard">Тяжелый</option>
+                </select>
+            </div>
+            <div class="board-size" style="display:none;">
+                <label for="boardSize">Выберите размер поля: </label>
+                <select id="boardSize">
+                    <option value="3">3x3</option>
+                </select>
+            </div>
+            <div class="board" id="board"></div>
+            <div class="stats">
+                <p>Победы: <span id="wins">0</span></p>
+                <p>Поражения: <span id="losses">0</span></p>
+                <p>Ничьи: <span id="ties">0</span></p>
+            </div>
+        </div>
+        <div class="neon-divider"></div>
+        <div class="analysis-container">
+            <input type="number" id="numSimulations" placeholder="Количество симуляций" style="padding: 5px; margin-bottom: 10px; width: 100%;">
+            <button class="neon-button" onclick="analyzeGame()">Анализ</button>
+            <div class="analysis-result" id="analysisResult"></div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; Vyachik, <br> 2024</p>
+    </footer>
+    <script>
+        const boardElement = document.getElementById('board');
+        const winsElement = document.getElementById('wins');
+        const lossesElement = document.getElementById('losses');
+        const tiesElement = document.getElementById('ties');
+        const difficultyElement = document.getElementById('difficulty');
+        const boardSizeElement = document.getElementById('boardSize');
+        const analysisResult = document.getElementById('analysisResult');
+        const numSimulationsInput = document.getElementById('numSimulations');
+
+        let boardSize = 3;
+        let currentPlayer = 'x';
+        let board = [];
+        let stats = { wins: 0, losses: 0, ties: 0 };
+
+        function initializeBoard() {
+            boardElement.style.gridTemplateColumns = `repeat(${boardSize}, 50px)`;
+            boardElement.style.gridTemplateRows = `repeat(${boardSize}, 50px)`;
+            boardElement.innerHTML = '';
+            board = Array(boardSize).fill(null).map(() => Array(boardSize).fill(''));
+            for (let i = 0; i < boardSize; i++) {
+                for (let j = 0; j < boardSize; j++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.addEventListener('click', () => makeMove(i, j));
+                    boardElement.appendChild(cell);
+                }
+            }
+        }
+
+        function makeMove(row, col) {
+            if (board[row][col] === '') {
+                board[row][col] = currentPlayer;
+                drawBoard();
+                const winCells = checkWin(currentPlayer);
+                if (winCells) {
+                    if (currentPlayer === 'x') {
+                        stats.wins++;
+                    } else {
+                        stats.losses++;
+                    }
+                    blinkWinCells(winCells, () => {
+                        resetGame();
+                    });
+                } else if (isBoardFull()) {
+                    stats.ties++;
+                    blinkWinCells([], () => {
+                        resetGame();
+                    });
+                } else {
+                    currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
+                    if (currentPlayer === 'o') {
+                        makeBotMove();
+                    }
+                }
+                updateStats();
+            }
+        }
+
+        function drawBoard() {
+            boardElement.childNodes.forEach((cell, index) => {
+                const row = Math.floor(index / boardSize);
+                const col = index % boardSize;
+                cell.textContent = board[row][col];
+                cell.className = `cell ${board[row][col]}`;
+            });
+        }
+
+        function checkWin(player) {
+            const winStr = player.repeat(3);
+            let winCells = [];
+            for (let i = 0; i < boardSize; i++) {
+                if (board[i].join('') === winStr) {
+                    winCells = board[i].map((_, idx) => [i, idx]);
+                    return winCells;
+                }
+                if (board.map(row => row[i]).join('') === winStr) {
+                    winCells = board.map((row, idx) => [idx, i]);
+                    return winCells;
+                }
+            }
+            if (board.map((row, idx) => row[idx]).join('') === winStr) {
+                winCells = board.map((row, idx) => [idx, idx]);
+                return winCells;
+            }
+            if (board.map((row, idx) => row[boardSize - 1 - idx]).join('') === winStr) {
+                winCells = board.map((row, idx) => [idx, boardSize - 1 - idx]);
+                return winCells;
+            }
+            return null;
+        }
+
+        function isBoardFull() {
+            return board.flat().every(cell => cell !== '');
+        }
+
+        function resetGame() {
+            currentPlayer = 'x';
+            initializeBoard();
+        }
+
+        function updateStats() {
+            winsElement.textContent = stats.wins;
+            lossesElement.textContent = stats.losses;
+            tiesElement.textContent = stats.ties;
+        }
+
+        function makeBotMove() {
+            let availableMoves = [];
+            for (let i = 0; i < boardSize; i++) {
+                for (let j = 0; j < boardSize; j++) {
+                    if (board[i][j] === '') {
+                        availableMoves.push([i, j]);
+                    }
+                }
+            }
+            const difficulty = difficultyElement.value;
+            if (difficulty === 'easy') {
+                const [row, col] = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+                makeMove(row, col);
+            } else if (difficulty === 'medium') {
+                let bestMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+                availableMoves.forEach(([row, col]) => {
+                    if (canWin(row, col, 'o')) {
+                        bestMove = [row, col];
+                    } else if (canWin(row, col, 'x')) {
+                        bestMove = [row, col];
+                    }
+                });
+                makeMove(...bestMove);
+            } else if (difficulty === 'hard') {
+                let bestMove = null;
+                let bestScore = -Infinity;
+                availableMoves.forEach(([row, col]) => {
+                    board[row][col] = 'o';
+                    let score = minimax(board, 0, false);
+                    board[row][col] = '';
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = [row, col];
+                    }
+                });
+                makeMove(...bestMove);
+            }
+        }
+
+        function canWin(row, col, player) {
+            board[row][col] = player;
+            const win = checkWin(player);
+            board[row][col] = '';
+            return win;
+        }
+
+        function minimax(board, depth, isMaximizing) {
+            if (checkWin('o')) return 10 - depth;
+            if (checkWin('x')) return depth - 10;
+            if (isBoardFull()) return 0;
+
+            if (isMaximizing) {
+                let bestScore = -Infinity;
+                for (let i = 0; i < boardSize; i++) {
+                    for (let j = 0; j < boardSize; j++) {
+                        if (board[i][j] === '') {
+                            board[i][j] = 'o';
+                            let score = minimax(board, depth + 1, false);
+                            board[i][j] = '';
+                            bestScore = Math.max(score, bestScore);
+                        }
+                    }
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < boardSize; i++) {
+                    for (let j = 0; j < boardSize; j++) {
+                        if (board[i][j] === '') {
+                            board[i][j] = 'x';
+                            let score = minimax(board, depth + 1, true);
+                            board[i][j] = '';
+                            bestScore = Math.min(score, bestScore);
+                        }
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        function blinkWinCells(winCells, callback) {
+            winCells.forEach(([row, col]) => {
+                const cell = boardElement.children[row * boardSize + col];
+                cell.classList.add('blink');
+            });
+            setTimeout(() => {
+                winCells.forEach(([row, col]) => {
+                    const cell = boardElement.children[row * boardSize + col];
+                    cell.classList.remove('blink');
+                });
+                callback();
+            }, 3000);
+        }
+
+        function analyzeGame() {
+            const numSimulations = parseInt(numSimulationsInput.value) || 1000; // Number of simulations
+            let results = { xWins: 0, oWins: 0, ties: 0 };
+
+            for (let i = 0; i < numSimulations; i++) {
+                let simulationBoard = Array(boardSize).fill(null).map(() => Array(boardSize).fill(''));
+                let simulationCurrentPlayer = Math.random() < 0.5 ? 'x' : 'o';
+
+                while (true) {
+                    let availableMoves = [];
+                    for (let i = 0; i < boardSize; i++) {
+                        for (let j = 0; j < boardSize; j++) {
+                            if (simulationBoard[i][j] === '') {
+                                availableMoves.push([i, j]);
+                            }
+                        }
+                    }
+
+                    if (availableMoves.length === 0) {
+                        results.ties++;
+                        break;
+                    }
+
+                    const [row, col] = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+                    simulationBoard[row][col] = simulationCurrentPlayer;
+
+                    if (checkWinSimulation(simulationBoard, simulationCurrentPlayer)) {
+                        if (simulationCurrentPlayer === 'x') {
+                            results.xWins++;
+                        } else {
+                            results.oWins++;
+                        }
+                        break;
+                    }
+
+                    simulationCurrentPlayer = simulationCurrentPlayer === 'x' ? 'o' : 'x';
+                }
+            }
+
+            const totalGames = results.xWins + results.oWins + results.ties;
+            const xWinRate = ((results.xWins / totalGames) * 100).toFixed(2);
+            const oWinRate = ((results.oWins / totalGames) * 100).toFixed(2);
+            const tieRate = ((results.ties / totalGames) * 100).toFixed(2);
+            analysisResult.style.display = "block";
+            analysisResult.innerHTML = `
+                <h4>Анализ игры "Крестики-нолики"</h4>
+                <p>Симулировано игр: ${numSimulations}</p>
+                <p>Победы крестиков (X): ${results.xWins} (${xWinRate}%)</p>
+                <p>Победы ноликов (O): ${results.oWins} (${oWinRate}%)</p>
+                <p>Ничьи: ${results.ties} (${tieRate}%)</p>
+                <h4>Выигрышные стратегии</h4>
+                <p>Для крестиков (X):</p>
+                <ul>
+                    <li>Центральная позиция является доминирующей стратегией.</li>
+                    <li>Старайтесь создать две линии атаки одновременно.</li>
+                </ul>
+                <p>Для ноликов (O):</p>
+                <ul>
+                    <li>Блокируйте центральную позицию, если ее заняли крестики.</li>
+                    <li>Фокусируйтесь на блокировании двух возможных линий атаки одновременно.</li>
+                </ul>
+            `;
+        }
+
+        function checkWinSimulation(board, player) {
+            const winStr = player.repeat(3);
+            for (let i = 0; i < boardSize; i++) {
+                if (board[i].join('') === winStr) return true;
+                if (board.map(row => row[i]).join('') === winStr) return true;
+            }
+            if (board.map((row, idx) => row[idx]).join('') === winStr) return true;
+            if (board.map((row, idx) => row[boardSize - 1 - idx]).join('') === winStr) return true;
+            return false;
+        }
+
+        difficultyElement.addEventListener('change', resetGame);
+
+        initializeBoard();
+    </script>
+</body>
+</html>

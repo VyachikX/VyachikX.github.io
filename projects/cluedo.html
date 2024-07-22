@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Cluedo game</title>
+    <style>
+        html {
+            overflow-x: hidden;
+            }
+        body {
+            font-family: Arial, sans-serif;
+             overflow-x: hidden;
+        }
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .room {
+            border: 1px solid #000;
+            padding: 20px;
+            text-align: center;
+        }
+        .highlight {
+            background-color: yellow;
+        }
+        .highlight-final {
+            background-color: brown;
+        }
+        #controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #log {
+            max-width: 600px;
+            margin: 20px auto;
+            border: 1px solid #000;
+            padding: 10px;
+            height: 200px;
+            overflow-y: scroll;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #000;
+            text-align: center;
+            padding: 5px;
+        }
+        .checked {
+            background-color: #d3d3d3;
+        }
+        #final-accusation {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        #accusation {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<h1 align="center">Игра Клуедо</h1>
+
+<div id="game-board">
+    <div class="room" id="room-0">Кухня</div>
+    <div class="room" id="room-1">Танцевальный зал</div>
+    <div class="room" id="room-2">Зимний сад</div>
+    <div class="room" id="room-3">Столовая</div>
+    <div class="room" id="room-four">Подвал</div>
+    <div>
+         <div class="room" id="room-4">Бильярдная</div>
+         <div class="room" id="room-5">Библиотека</div>
+    </div>
+    <div class="room" id="room-6">Гостиная</div>
+    <div class="room" id="room-7">Холл</div>
+    <div class="room" id="room-8">Кабинет</div>
+</div>
+
+<div id="controls">
+    <button onclick="startGame()">Начать игру</button>
+    <button onclick="rollDice()">Бросить кубик</button>
+    <button onclick="makeAccusation()">Заявить подозрение</button>
+    <button onclick="makeFinalAccusation()">Заявить обвинение</button>
+</div>
+
+<div id="accusation">
+    <h2>Заявить подозрение</h2>
+    <label for="accusation-suspect">Подозреваемый:</label>
+    <select id="accusation-suspect">
+        <option value="">--Выберите--</option>
+    </select>
+    <label for="accusation-weapon">Оружие:</label>
+    <select id="accusation-weapon">
+        <option value="">--Выберите--</option>
+    </select>
+    <label for="accusation-room">Комната:</label>
+    <select id="accusation-room">
+        <option value="" disabled></option>
+    </select>
+    <button onclick="submitAccusation()">Подтвердить подозрение</button>
+    <button onclick="cancelAccusation()">Отменить</button>
+</div>
+
+<div id="final-accusation">
+    <h2>Финальное обвинение</h2>
+    <label for="final-suspect">Обыиняемый:</label>
+    <select id="final-suspect">
+        <option value="">--Выберите--</option>
+    </select>
+    <label for="final-weapon">Оружие:</label>
+    <select id="final-weapon">
+        <option value="">--Выберите--</option>
+    </select>
+    <label for="final-room">Комната:</label>
+    <select id="final-room">
+        <option value="">--Выберите--</option>
+    </select>
+    <button onclick="submitFinalAccusation()">Подтвердить обвинение</button>
+    <button onclick="cancelFinalAccusation()">Отменить</button>
+</div>
+
+<div id="log"></div>
+
+<div id="notebook">
+    <h2>Блокнот расследования</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Кто?</th>
+                <th>Что?</th>
+                <th>Где?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="6" id="who">
+                    <div>Елизавета Краснова</div>
+                    <div>Дмитрий Горчичников</div>
+                    <div>Наталья Белых</div>
+                    <div>Яков Зеленович</div>
+                    <div>Галина Голубева</div>
+                    <div>Виктор Черниченко</div>
+                </td>
+                <td rowspan="6" id="what">
+                    <div>Подсвечник</div>
+                    <div>Нож</div>
+                    <div>Револьвер</div>
+                    <div>Верёвка</div>
+                    <div>Свинцовая труба</div>
+                    <div>Гаечный ключ</div>
+                </td>
+                <td id="where">
+                    <div>Кухня</div>
+                    <div>Танцевальный зал</div>
+                    <div>Зимний сад</div>
+                    <div>Столовая</div>
+                    <div>Бильярдная</div>
+                    <div>Библиотека</div>
+                    <div>Гостиная</div>
+                    <div>Холл</div>
+                    <div>Кабинет</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <footer>&copy; Vyachik, <br> 2024</footer>
+</div>
+
+<script>
+    const characters = ['Елизавета Краснова', 'Дмитрий Горчичников', 'Наталья Белых', 'Яков Зеленович', 'Галина Голубева', 'Виктор Черниченко'];
+    const weapons = ['Подсвечник', 'Нож', 'Револьвер', 'Верёвка', 'Свинцовая труба', 'Гаечный ключ'];
+    const rooms = ['Кухня', 'Танцевальный зал', 'Зимний сад', 'Столовая', 'Бильярдная', 'Библиотека', 'Гостиная', 'Холл', 'Кабинет'];
+    let solution = {};
+    let playerPosition = 0;
+    let log = document.getElementById('log');
+    let playerHand = [];
+    let botHands = [[], [], [], [], []];
+    let currentPlayer = 0;
+    let accusations = [];
+    let gameStarted = false;
+    let gameOver = false;
+    let diceRolled = false;
+    let previousPosition = 0;
+
+    function startGame() {
+        if (gameStarted) {
+            log.innerHTML += '<p>Игра уже началась!</p>';
+            return;
+        }
+        gameOver = false;
+        solution.character = characters[Math.floor(Math.random() * characters.length)];
+        solution.weapon = weapons[Math.floor(Math.random() * weapons.length)];
+        solution.room = rooms[Math.floor(Math.random() * rooms.length)];
+
+        let allCards = characters.concat(weapons, rooms);
+        allCards = allCards.filter(card => card !== solution.character && card !== solution.weapon && card !== solution.room);
+        allCards = shuffle(allCards);
+
+        playerHand = allCards.slice(0, Math.floor(allCards.length / 6));
+        for (let i = 0; i < 5; i++) {
+            botHands[i] = allCards.slice(Math.floor(allCards.length / 6) * (i + 1), Math.floor(allCards.length / 6) * (i + 2));
+            botHands[i].position = 0;
+        }
+
+        log.innerHTML = '<p>Игра началась! Вы расследуете убийство в особняке.</p>';
+        log.innerHTML += '<p>Ваши карты: ' + playerHand.join(', ') + '</p>';
+        playerHand.forEach(card => markNotebook(card, true));
+        gameStarted = true;
+        currentPlayer = 0;
+        highlightRoom(playerPosition);
+    }
+
+    function rollDice() {
+        if (!gameStarted || gameOver) {
+            log.innerHTML += '<p>Сначала начните игру!</p>';
+            return;
+        }
+
+        if (currentPlayer !== 0) {
+            log.innerHTML += `<p>Сейчас ходит бот ${currentPlayer}</p>`;
+            return;
+        }
+
+        if (diceRolled) {
+            log.innerHTML += '<p>Вы уже бросали кубик в этом ходу!</p>';
+            return;
+        }
+
+        let roll = Math.floor(Math.random() * 6) + 1; //Math.floor(Math.random() * 7) + 0; подумать!
+        log.innerHTML += `<p>Вы бросили кубики: ${roll}</p>`;
+        playerPosition = (playerPosition + roll) % rooms.length;
+        log.innerHTML += `<p>Вы переместились в ${rooms[playerPosition]}</p>`;
+        highlightRoom(playerPosition);
+        currentPosition = playerPosition;
+        diceRolled = true;
+    }
+
+    function makeAccusation() {
+        if (!gameStarted || gameOver) {
+            log.innerHTML += '<p>Сначала начните игру!</p>';
+            return;
+        }
+
+        if (currentPlayer !== 0) {
+            log.innerHTML += `<p>Сейчас ходит бот ${currentPlayer}</p>`;
+            return;
+        }
+        if (!diceRolled) {
+            log.innerHTML += `<p>Сначала бросьте кубик!</p>`;
+            return;
+        }
+
+        document.getElementById('accusation').style.display = 'block';
+        populateAccusationOptions();
+        
+    }
+
+    function submitAccusation() {
+        const suspect = document.getElementById('accusation-suspect').value;
+        const weapon = document.getElementById('accusation-weapon').value;
+        const room = document.getElementById('accusation-room').value;
+
+        if (!suspect || !weapon || !room) {
+            log.innerHTML += '<p>Необходимо выбрать подозреваемого, оружие и комнату для подозрения!</p>';
+            return;
+        }
+
+        log.innerHTML += `<p>Вы подозреваете, что ${suspect} совершил убийство в ${room} с помощью ${weapon}.</p>`;
+
+        let accusation = { suspect, weapon, room };
+        accusations.push(accusation);
+
+        let disproved = false;
+        for (let i = 0; i < botHands.length; i++) {
+            for (let j = 0; j < botHands[i].length; j++) {
+                if (botHands[i][j] === suspect || botHands[i][j] === weapon || botHands[i][j] === room) {
+                    log.innerHTML += `<p>Бот ${i + 1} опровергает ваше подозрение с картой ${botHands[i][j]}.</p>`;
+                    markNotebook(botHands[i][j]);
+                    disproved = true;
+                    break;
+                }
+            }
+            if (disproved) break;
+        }
+
+        if (!disproved) {
+            log.innerHTML += `<p>Никто не смог опровергнуть ваше подозрение.</p>`;
+        }
+
+        diceRolled = false;
+        document.getElementById('accusation').style.display = 'none';
+        nextPlayer();
+
+    }
+
+    function makeFinalAccusation() {
+        if (!gameStarted || gameOver) {
+            log.innerHTML += '<p>Сначала начните игру!</p>';
+            return;
+        }
+
+        if (currentPlayer !== 0) {
+            log.innerHTML += `<p>Сейчас ходит бот ${currentPlayer}</p>`;
+            return;
+        }
+
+        document.getElementById('final-accusation').style.display = 'block';
+        document.querySelectorAll('.room').forEach(room => room.classList.remove('highlight-final'));
+        document.getElementById('room-four').classList.add('highlight-final');
+
+        previousPosition = playerPosition;
+        document.getElementById(`room-${previousPosition}`).classList.remove('highlight');
+
+        populateFinalAccusationOptions();
+    }
+
+    function submitFinalAccusation() {
+        const suspect = document.getElementById('final-suspect').value;
+        const weapon = document.getElementById('final-weapon').value;
+        const room = document.getElementById('final-room').value;
+
+        if (!suspect || !weapon || !room) {
+            log.innerHTML += '<p>Необходимо выбрать подозреваемого, оружие и комнату для обвинения!</p>';
+            return;
+        }
+
+        if (suspect === solution.character && weapon === solution.weapon && room === solution.room) {
+            log.innerHTML += `<p>Вы выиграли! Правильное обвинение: ${suspect} с ${weapon} в ${room}.</p>`;
+        } else {
+            log.innerHTML += `<p>Неправильное обвинение! Правильное обвинение: ${solution.character} с ${solution.weapon} в ${solution.room}. Игра окончена.</p>`;
+        }
+
+        gameOver = true;
+        gameStarted = false;
+        endGame();
+    }
+
+    function cancelAccusation() {
+        document.getElementById('accusation').style.display = 'none';
+        document.querySelectorAll('.room').forEach(room => room.classList.remove('highlight-final'));
+        document.getElementById(`room-${currentPosition}`).classList.add('highlight');
+    }
+
+    function cancelFinalAccusation() {
+        document.getElementById('final-accusation').style.display = 'none';
+        document.querySelectorAll('.room').forEach(room => room.classList.remove('highlight-final'));
+        document.getElementById(`room-${currentPosition}`).classList.add('highlight');
+    }
+
+    function endGame() {
+        document.getElementById('final-accusation').style.display = 'none';
+        document.querySelectorAll('.room').forEach(room => room.classList.remove('highlight-final'));
+    }
+
+    function nextPlayer() {
+        if (gameOver) return;
+
+        currentPlayer = (currentPlayer + 1) % 6;
+        if (currentPlayer !== 0) {
+            botTurn();
+        } else {
+            log.innerHTML += '<p>Ваш ход!</p>';
+            diceRolled = false;
+        }
+    }
+
+    function botTurn() {
+        let roll = Math.floor(Math.random() * 6) + 1;
+        log.innerHTML += `<p>Бот ${currentPlayer} бросил кубик: ${roll}</p>`;
+        let botPosition = (botHands[currentPlayer - 1].position + roll) % rooms.length;
+        botHands[currentPlayer - 1].position = botPosition;
+        log.innerHTML += `<p>Бот ${currentPlayer} переместился в ${rooms[botPosition]}</p>`;
+
+        let suspect = characters[Math.floor(Math.random() * characters.length)];
+        let weapon = weapons[Math.floor(Math.random() * weapons.length)];
+        let room = rooms[botPosition];
+        log.innerHTML += `<p>Бот ${currentPlayer} подозревает, что ${suspect} совершил убийство в ${room} с помощью ${weapon}.</p>`;
+
+        let disproved = false;
+        for (let i = 0; i < 6; i++) {
+            if (i === currentPlayer) continue;
+
+            let hand = i === 0 ? playerHand : botHands[i - 1];
+            for (let j = 0; j < hand.length; j++) {
+                if (hand[j] === suspect || hand[j] === weapon || hand[j] === room) {
+                    log.innerHTML += `<p>${i === 0 ? 'Вы' : 'Бот ' + i} опровергает подозрение бота ${currentPlayer} с картой ${hand[j]}.</p>`;
+                    markNotebook(hand[j]);
+                    disproved = true;
+                    break;
+                }
+            }
+            if (disproved) break;
+        }
+
+        if (!disproved) {
+            log.innerHTML += `<p>Никто не смог опровергнуть подозрение бота ${currentPlayer}.</p>`;
+        }
+
+        nextPlayer();
+    }
+
+    function highlightRoom(position) {
+        let rooms = document.querySelectorAll('.room');
+        rooms.forEach(room => room.classList.remove('highlight'));
+        document.getElementById(`room-${position}`).classList.add('highlight');
+    }
+
+    function markNotebook(card, isPlayerCard = false) {
+        const who = document.getElementById('who').querySelectorAll('div');
+        const what = document.getElementById('what').querySelectorAll('div');
+        const where = document.getElementById('where').querySelectorAll('div');
+
+        who.forEach(item => {
+            if (item.innerText === card) {
+                item.classList.add('checked');
+                if (isPlayerCard) item.innerText += ' ✓';
+            }
+        });
+
+        what.forEach(item => {
+            if (item.innerText === card) {
+                item.classList.add('checked');
+                if (isPlayerCard) item.innerText += ' ✓';
+            }
+        });
+
+        where.forEach(item => {
+            if (item.innerText === card) {
+                item.classList.add('checked');
+                if (isPlayerCard) item.innerText += ' ✓';
+            }
+        });
+    }
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function populateFinalAccusationOptions() {
+        const suspectSelect = document.getElementById('final-suspect');
+        const weaponSelect = document.getElementById('final-weapon');
+        const roomSelect = document.getElementById('final-room');
+
+        suspectSelect.innerHTML = '<option value="">--Выберите--</option>';
+        characters.forEach(character => {
+            suspectSelect.innerHTML += `<option value="${character}">${character}</option>`;
+        });
+
+        weaponSelect.innerHTML = '<option value="">--Выберите--</option>';
+        weapons.forEach(weapon => {
+            weaponSelect.innerHTML += `<option value="${weapon}">${weapon}</option>`;
+        });
+
+        roomSelect.innerHTML = '<option value="">--Выберите--</option>';
+        rooms.forEach(room => {
+            if (room !== 'Подвал') {
+                roomSelect.innerHTML += `<option value="${room}">${room}</option>`;
+            }
+        });
+    }
+
+    function populateAccusationOptions() {
+        const suspectSelect = document.getElementById('accusation-suspect');
+        const weaponSelect = document.getElementById('accusation-weapon');
+        const roomSelect = document.getElementById('accusation-room');
+
+        suspectSelect.innerHTML = '<option value="">--Выберите--</option>';
+        characters.forEach(character => {
+            suspectSelect.innerHTML += `<option value="${character}">${character}</option>`;
+        });
+
+        weaponSelect.innerHTML = '<option value="">--Выберите--</option>';
+        weapons.forEach(weapon => {
+            weaponSelect.innerHTML += `<option value="${weapon}">${weapon}</option>`;
+        });
+
+        roomSelect.innerHTML = '<option value=""></option>';
+        let room = rooms[playerPosition];
+        roomSelect.innerHTML = `<option value="${room}">${room}</option>`;
+
+        }
+</script>
+</body>
+</html>

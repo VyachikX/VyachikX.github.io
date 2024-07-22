@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5dc; 
+            color: #3d2b1f; 
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #faf0e6; 
+            padding: 10px;
+        }
+
+     
+        main {
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #faf0e6;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        nav button, button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ffd700; 
+            border: none;
+            cursor: pointer;
+        }
+
+        nav button:hover, button:hover {
+            background-color: #ffd700cc; 
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            border: 1px solid #3d2b1f; 
+            padding: 10px;
+            text-align: center;
+        }
+
+        #month-year {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .highlight-today {
+            background: linear-gradient(120deg, #ffe801, #50981c);
+            animation: shimmer 2s infinite; 
+        }
+      
+        @keyframes shimmer {
+            0% {
+                background-position: -40px 0;
+            }
+            100% {
+                background-position: 40px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <button onclick="location.href='../index.html'">Главная</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="calendar">
+            <h1 id="month-year"></h1>
+            <table id="calendar-table">
+                <!-- Calendar dates will be inserted here dynamically with JavaScript -->
+            </table>
+        </section>
+        <button onclick="showFullYearCalendar()">Показать весь год</button>
+    </main>
+
+    <footer>
+        <p>&copy; Vyachik, <br> 2024</p>
+    </footer>
+
+    <script>
+
+        function getCurrentDate() {
+            const currentDate = new Date();
+            return currentDate;
+        }
+
+        function showCurrentMonthCalendar() {
+            const currentDate = getCurrentDate();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+
+            displayCalendar(currentYear, currentMonth);
+        }
+
+   
+        function showFullYearCalendar() {
+            const currentYear = getCurrentDate().getFullYear();
+            const calendarSection = document.getElementById("calendar");
+            calendarSection.innerHTML = ''; 
+
+            for (let month = 0; month < 12; month++) {
+                const monthContainer = document.createElement("div");
+                monthContainer.classList.add("month-container");
+                const monthTitle = document.createElement("h2");
+                monthTitle.textContent = `${getMonthName(month)} ${currentYear}`;
+                monthContainer.appendChild(monthTitle);
+
+                const monthTable = document.createElement("table");
+                monthTable.id = `calendar-table-${month}`;
+                monthContainer.appendChild(monthTable);
+                calendarSection.appendChild(monthContainer);
+
+                displayCalendar(currentYear, month, monthTable);
+            }
+        }
+
+        function displayCalendar(year, month, table = document.getElementById("calendar-table")) {
+            const monthNames = [
+                "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+                "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+            ];
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startingDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; // Неделя начинается с понедельника
+            const totalDays = lastDay.getDate();
+
+            const monthYearHeader = document.getElementById("month-year");
+            if (table.id === "calendar-table") {
+                monthYearHeader.textContent = `${monthNames[month]} ${year}`;
+            }
+
+            table.innerHTML = "";
+
+            const headerRow = table.insertRow();
+            const daysOfWeek = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+            for (let day of daysOfWeek) {
+                const cell = headerRow.insertCell();
+                cell.textContent = day;
+            }
+
+        
+            let date = 1;
+            for (let i = 0; i < 6; i++) {
+                const row = table.insertRow();
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < startingDay) {
+                      
+                        const cell = row.insertCell();
+                        cell.textContent = "";
+                    } else if (date > totalDays) {
+                        
+                        break;
+                    } else {
+                        const cell = row.insertCell();
+                        cell.textContent = date;
+
+                        if (year === getCurrentDate().getFullYear() && month === getCurrentDate().getMonth() && date === getCurrentDate().getDate()) {
+                            cell.classList.add("highlight-today");
+                        }
+
+                        date++;
+                    }
+                }
+            }
+        }
+
+  
+        function getMonthName(monthIndex) {
+            const monthNames = [
+                "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+                "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+            ];
+            return monthNames[monthIndex];
+        }
+
+ 
+        document.addEventListener("DOMContentLoaded", function() {
+            showCurrentMonthCalendar(); 
+            const footerYear = document.getElementById("footer-year");
+            footerYear.textContent = getCurrentDate().getFullYear();
+        });
+    </script>
+</body>
+</html>

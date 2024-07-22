@@ -1,0 +1,590 @@
+body {
+    background-color: #3e2723;
+    color: #d7ccc8;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+h2 {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    color: #ffccbc;
+    text-shadow: 1px 0 1px #000,
+        0 1px 1px #000,
+        -1px 0 1px #000,
+        0 -1px 1px #000;
+}
+
+.container {
+    border: 1px solid #795548;
+    padding: 10px;
+    background: #4e342e;
+    overflow: hidden;
+    position: relative;
+    margin-top: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.actions {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.actions button {
+    background-color: #6d4c41;
+    color: #ffccbc;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.actions button:hover {
+    background-color: #5d4037;
+}
+
+.submenu {
+    display: none;
+    background: #3e2723;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.submenu.active {
+    display: block;
+}
+
+.logs {
+    color: #ffc4b0;
+    height: 100px;
+    overflow-y: auto;
+    background: #6e6c6cad;
+    background-image: url("src/newyorktimes.png"), linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+    background-size: cover;
+    background-blend-mode: darken;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 0 1px #000,
+        0 1px 1px #000,
+        -1px 0 1px #000,
+        0 -1px 1px #000;
+}
+
+
+.evidence-board {
+    height: 219px;
+    text-align: center;
+    background: #4e342e;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    background-image: url("src/board.jpg");
+    background-size: cover;
+    border: 7px groove #795548;
+    border-radius: 5px;
+    position: relative;
+    overflow-y: auto;
+}
+
+.victim-dossier,
+.suspect-dossier,
+.dossier,
+.address-entry {
+    background-color: #3e2723;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-size: cover;
+    display: none;
+    border-radius: 5px;
+    color: black;
+    /* Changed text color to black */
+}
+
+.victim-dossier {
+    background-image: url('src/old-paper-texture.jpg');
+    border: 2px solid #d7ccc8;
+}
+
+.suspect-dossier {
+    background-image: url('src/old-paper-texture.jpg');
+    border: 2px solid #d32f2f;
+}
+
+.dossier {
+    display: inline-block;
+    background: #5d4037;
+    margin: 5px;
+    padding: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    background-image: url('src/old-paper-texture.jpg');
+    border: 2px dotted #388e3c;
+    border-radius: 5px;
+    color: black;
+}
+
+.address-entry {
+    display: inline-block;
+    background: #6d4c41;
+    margin: 5px;
+    padding: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    background-image: url('src/addresscard.jpg');
+    border: 2px dotted #0288d1;
+    border-radius: 5px;
+    color: black;
+}
+
+
+@media (min-width: 768px) {
+    .evidence {
+        margin: 0 auto;
+        width: 150px;
+        height: 150px;
+        text-align: center;
+        background: #fff489;
+        position: absolute;
+        color: black;
+        border-radius: 8px;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2), -3px -3px 10px rgba(255, 255, 255, 0.5);
+        background: linear-gradient(145deg, #fefc5d, #f6f1c1);
+    }
+}
+
+@media (max-width: 768px) {
+    .evidence {
+        margin: 0 auto;
+        width: 75px;
+        height: 75px;
+        text-align: center;
+        background: #fff489;
+        position: absolute;
+        color: black;
+        border-radius: 8px;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2), -3px -3px 10px rgba(255, 255, 255, 0.5);
+        background: linear-gradient(145deg, #fefc5d, #f6f1c1);
+    }
+}
+
+.pushpin {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 35px;
+    height: 35px;
+}
+
+.checkbox {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.residents-dossier {
+    background-image: url('src/clipboard.jpg');
+    background-size: cover;
+}
+
+.address-book {
+    background-image: url('src/addressbook.jpg');
+    background-size: cover;
+}
+
+.dossier-carusel,
+.address-entry-carusel {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    text-align: right;
+    background-color: #3e2723;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #795548;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 10px;
+    color: #ffccbc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.phone-simulator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.close {
+    position: relative;
+    top: 0;
+    right: 0;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #ffccbc;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.phone-screen {
+    margin: auto;
+    border: 1px solid #795548;
+    padding: 12px;
+    text-align: right;
+    background: #4e342e;
+    color: #ffccbc;
+}
+
+.phone-keypad {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.phone-row {
+    display: flex;
+}
+
+.phone-key,
+.phone-call {
+    border: 1px solid #795548;
+    padding: 20px;
+    margin: 5px;
+    cursor: pointer;
+    background: #6d4c41;
+    color: #ffccbc;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.phone-call {
+    background-color: #388e3c;
+    color: white;
+}
+
+.phone-call:hover {
+    background-color: #2e7d32;
+}
+
+#phoneNumberInput {
+    width: 80%;
+    padding: 10px;
+    font-size: 20px;
+    background: #4e342e;
+    color: #ffccbc;
+    border: 1px solid #795548;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.message-bubble {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+}
+
+.message-left {
+    background-color: #d7ccc8;
+    color: #4e342e;
+    align-self: flex-start;
+}
+
+.message-right {
+    background-color: #ffccbc;
+    color: #4e342e;
+    align-self: flex-end;
+}
+
+.phone-key img {
+    width: 24px;
+    height: auto;
+    vertical-align: middle;
+}
+
+.notebook-content {
+    text-align: justify;
+    background-image: url("src/paper-image.jpg");
+    background-size: cover;
+    color: black;
+    height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    padding: 10px;
+    margin-top: 15px;
+}
+
+@font-face {
+    font-family: SaNoRules;
+    src: url(fonts/saNoRules.ttf);
+}
+
+@font-face {
+    font-family: Rosarium;
+    src: url(fonts/rosarium.ttf);
+}
+
+.music-controls {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}
+
+.music-icon-container {
+    background-color: #ffccbc;
+    border-radius: 65%;
+    padding: 8px;
+    display: inline-block;
+    border: 3px solid black;
+}
+
+.music-icon-container img {
+    width: 25px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Загрузочный экран */
+.loader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #3e2723;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 1s ease-out;
+}
+
+/* Анимация исчезновения */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* Скрыть загрузочный экран после задержки */
+body.loaded .loader {
+    animation: fadeOut 1s ease-out;
+    animation-delay: 5s;
+    /* Задержка перед началом анимации */
+    opacity: 0;
+    pointer-events: none;
+    /* Предотвращает клики на загрузочный экран */
+}
+
+.loading {
+    position: relative;
+    width: 75px;
+    height: 75px;
+}
+
+#aboutModal,
+#helpModal {
+    text-align: justify;
+}
+
+ol {
+    text-align: initial;
+}
+
+li {
+    text-align: initial;
+}
+
+ul {
+    text-align: initial;
+}
+
+.tv-container {
+    position: relative;
+    width: 80%;
+    margin: 20px auto;
+    background-color: black;
+    border-radius: 10px;
+}
+
+.tv-frame {
+    padding: 15px;
+    border: 2px solid #555;
+    border-radius: 10px;
+    box-shadow: 0 0 8px #333;
+}
+
+.tv-screen {
+    width: 100%;
+    height: 250px;
+    background-color: #000;
+    border: 1px solid #666;
+    border-radius: 5px;
+    position: relative;
+    background-size: cover;
+}
+
+.tv-model {
+    color: white;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.tv-ticker {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 24px;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 16px;
+}
+
+.marquee {
+    display: block;
+    animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.power-button {
+    background-image: url("src/TV-off-button.png");
+    background-size: cover;
+    right: 10px;
+    top: 60%;
+    margin-right: auto;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    box-shadow: 0 2px 6px #222;
+}
+
+.power-button:hover {
+    background-color: #555;
+}
+
+.hint-box {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    color: black;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+}
+
+* {
+      touch-action: manipulation;
+}
+
+a {
+    text-decoration-color: #ffccbc;
+    color: #ffccbc; 
+}
+
+
+.custom-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.custom-modal.show {
+    display: block;
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.custom-modal.show .modal-content {
+    background-image: url("src/newspaper.png");
+    background-size: cover;
+    text-shadow: 1px 0 1px #000,
+        0 1px 1px #000,
+        -1px 0 1px #000,
+        0 -1px 1px #000;
+    animation: fadeIn 0.3s ease;
+}
+
+.custom-modal.hide .modal-content {
+    animation: fadeOut 0.3s ease;
+}

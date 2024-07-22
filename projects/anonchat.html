@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous chat</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(120deg, #000428, #004e92);
+            color: #ffffff;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        nav {
+            background-color: #1f1f1f;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        nav button {
+            background-color: #272727;
+            color: #ff00ff;
+            border: 2px solid #ff00ff;
+            margin: 0 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        nav button:hover {
+            background-color: #ff00ff;
+            color: #272727;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .chat-box {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            border: 2px solid #ff00ff;
+            background-color: #272727;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-input {
+            display: flex;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 10px;
+            flex-direction: column;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ff00ff;
+            background-color: #272727;
+            color: #ff00ff;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .chat-input button {
+            background-color: #272727;
+            color: #ff00ff;
+            border: 2px solid #ff00ff;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            width: 100%;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .chat-input button:hover {
+            background-color: #ff00ff;
+            color: #272727;
+        }
+
+        footer {
+            background-color: #1f1f1f;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .debug {
+            color: #808080;
+            font-size: 0.8em;
+            margin: 0;
+        }
+
+        @media (min-width: 600px) {
+            .chat-input {
+                flex-direction: row;
+            }
+            .chat-input input {
+                margin-right: 10px;
+                margin-bottom: 0;
+            }
+            .chat-input button {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <button onclick="location.href='../index.html'">Главная</button>
+    </nav>
+    <div class="chat-container">
+        <h1>Анонимный чат</h1>
+        <div class="chat-box" id="chatBox"></div>
+        <div class="chat-input">
+            <input type="text" id="chatMessage" placeholder="Введите сообщение">
+            <button onclick="sendMessage()">Отправить</button>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="roomId" placeholder="Введите ID комнаты">
+            <button onclick="joinRoom()">Присоединиться к комнате</button>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="nickname" placeholder="Введите ник">
+        </div>
+    </div>
+    <footer>
+       <p>&copy; Vyachik, <br> 2024</p>
+    </footer>
+    <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
+    <script>
+        const peer = new Peer();
+        let conn;
+        let nickname = 'Anonymous';
+        const chatBox = document.getElementById('chatBox');
+        let members = [];
+        peer.on('open', (id) => {
+            displayDebugMessage('My peer ID is: ' + id);
+            members.push(id);
+        });
+
+        peer.on('connection', (connection) => {
+            conn = connection;
+            conn.on('data', (data) => {
+                const { message, sender, timestamp } = data;
+                displayMessage(message, sender, timestamp);
+            });
+        });
+
+        function displayMessage(message, sender, timestamp) {
+            const messageElement = document.createElement('p');
+            messageElement.innerHTML = `<strong>${sender}</strong> <em>${new Date(timestamp).toLocaleTimeString()}</em>: ${message}`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function sendMessage() {
+            const message = document.getElementById('chatMessage').value;
+            const nicknameInput = document.getElementById('nickname').value;
+            if (nicknameInput.trim() !== '') {
+                nickname = nicknameInput;
+            }
+            if (conn && message.trim() !== '') {
+                const timestamp = Date.now();
+                conn.send({ message, sender: nickname, timestamp });
+                displayMessage(message, 'Вы', timestamp);
+                document.getElementById('chatMessage').value = '';
+            }
+        }
+
+        function joinRoom() {
+            const roomId = document.getElementById('roomId').value;
+            const nicknameInput = document.getElementById('nickname').value;
+            conn = peer.connect(roomId);
+            conn.on('open', () => {
+                const timestamp = Date.now();
+                displayMessage('You connected to the room', 'System', timestamp);
+                
+                if (nicknameInput.trim() !== '') {
+                    nickname = nicknameInput;
+                }
+                else {
+                    nickname = "";
+                }
+                if (conn.peer == members[0]) {
+                    document.getElementById('chatMessage').value = members[0] + " (" + nickname + ")" + " connected to room";
+                }
+                else {
+                    document.getElementById('chatMessage').value = members[0] + " (" + nickname + ")" + " connected to room";
+                }
+                
+                const message = document.getElementById('chatMessage').value;
+                conn.send({ message, sender: "System", timestamp });
+                document.getElementById('chatMessage').value = "";
+            });
+            conn.on('data', (data) => {
+                const { message, sender, timestamp } = data;
+                displayMessage(message, sender, timestamp);
+            });
+            conn.on('close', () => {
+                if (nicknameInput.trim() !== '') {
+                    nickname = nicknameInput;
+                }
+                else {
+                    nickname = "";
+                }
+                document.getElementById('chatMessage').value = conn.peer + " (" + nickname + ")" + " disconnected from room";
+                const message = document.getElementById('chatMessage').value;
+                conn.send({ message, sender: "System", timestamp });
+                document.getElementById('chatMessage').value = "";
+            });
+        }
+
+        function displayDebugMessage(message) {
+            const debugElement = document.createElement('p');
+            debugElement.className = 'debug';
+            debugElement.innerText = message;
+            chatBox.appendChild(debugElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>

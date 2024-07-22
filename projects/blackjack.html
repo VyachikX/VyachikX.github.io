@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2a2a2a;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; 
+            position: relative;
+        }
+
+        nav {
+            background-color: #333;
+            width: 100%;
+            padding: 10px 0;
+            position: absolute;
+            top: 0;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        nav button {
+            color: white;
+            text-decoration: none;
+            font-size: 14px; 
+            margin: 0 10px;
+        }
+
+        header {
+            background-color: #f44336;
+            color: #fff;
+            padding: 5px 0; 
+            width: 100%;
+            position: absolute;
+            top: 50px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .container {
+            max-width: 500px; 
+            width: 100%;
+            background-color: #f44336;
+            border-radius: 10px;
+            padding: 10px; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-top: 90px; 
+            position: relative;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            min-height: 80px; 
+        }
+
+        .card {
+            background-color: white;
+            color: black;
+            border: 1px solid #333;
+            border-radius: 5px;
+            width: 40px; 
+            height: 60px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+            font-size: 16px; 
+            background-image: url('card-back.png');
+            background-size: cover;
+            transform: rotateY(180deg);
+            transition: transform 0.5s;
+        }
+
+        .card.flipped {
+            background-image: none;
+            transform: rotateY(0);
+        }
+
+        .score {
+            margin: 5px 0; 
+            font-size: 16px; 
+        }
+
+        #blackjackMessage {
+            font-size: 14px; 
+            margin: 10px 0; 
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px; 
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px; 
+            font-size: 14px; 
+            cursor: pointer;
+            flex: 1;
+            margin: 0 5px; 
+        }
+
+        button:disabled {
+            background-color: #555;
+        }
+
+        footer {
+            background-color: #333;
+            width: 100%;
+            padding: 5px 0; 
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+            color: white;
+            font-size: 12px; 
+        }
+
+        .counters {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0; 
+        }
+
+        .counter {
+            font-size: 14px; 
+            margin: 0 10px; 
+        }
+    </style>
+</head>
+<body>
+    <nav>
+       <button onclick="location.href='../index.html'">Главная</button>
+    </nav>
+
+    <header>
+        <h1>Блэкджек</h1>
+    </header>
+
+    <div class="container">
+        <div id="playerCards" class="cards"></div>
+        <div id="playerScore" class="score">Счёт: 0</div>
+        <div id="dealerCards" class="cards"></div>
+        <div id="dealerScore" class="score">Счёт: 0</div>
+        <div id="blackjackMessage"></div>
+        <div class="counters">
+            <div class="counter" id="wins">Победы: 0</div>
+            <div class="counter" id="losses">Поражения: 0</div>
+            <div class="counter" id="ties">Ничьи: 0</div>
+        </div>
+        <div class="buttons">
+            <button id="dealButton" onclick="dealCards()">Deal</button>
+            <button id="hitButton" onclick="hit()" disabled>Hit</button>
+            <button id="standButton" onclick="stand()" disabled>Stand</button>
+        </div>
+    </div>
+
+    <footer>
+        &copy; Vyachik, <br> 2024
+    </footer>
+
+    <script>
+        const cardValues = {
+            '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10,
+            'J': 10, 'Q': 10, 'K': 10, 'A': 11
+        };
+        let playerHand = [];
+        let dealerHand = [];
+        let wins = 0;
+        let losses = 0;
+        let ties = 0;
+        const playerCardsElement = document.getElementById('playerCards');
+        const dealerCardsElement = document.getElementById('dealerCards');
+        const playerScoreElement = document.getElementById('playerScore');
+        const dealerScoreElement = document.getElementById('dealerScore');
+        const blackjackMessageElement = document.getElementById('blackjackMessage');
+        const winsElement = document.getElementById('wins');
+        const lossesElement = document.getElementById('losses');
+        const tiesElement = document.getElementById('ties');
+
+        function getRandomCard() {
+            const cards = Object.keys(cardValues);
+            const randomCard = cards[Math.floor(Math.random() * cards.length)];
+            return randomCard;
+        }
+
+        function calculateHandValue(hand) {
+            let sum = 0;
+            let aces = 0;
+
+            hand.forEach(card => {
+                sum += cardValues[card];
+                if (card === 'A') aces += 1;
+            });
+
+            while (sum > 21 && aces) {
+                sum -= 10;
+                aces -= 1;
+            }
+
+            return sum;
+        }
+
+        function createCardElement(card, isNew) {
+            const cardElement = document.createElement('div');
+            cardElement.classList.add('card');
+            cardElement.innerText = card;
+            if (isNew) {
+                setTimeout(() => {
+                    cardElement.classList.add('flipped');
+                }, 100);
+            } else {
+                cardElement.classList.add('flipped');
+            }
+            return cardElement;
+        }
+
+        function displayCards() {
+            const playerCardsHTML = playerHand.map((card, index) => createCardElement(card, index >= playerCardsElement.childElementCount));
+            const dealerCardsHTML = dealerHand.map((card, index) => createCardElement(card, index >= dealerCardsElement.childElementCount));
+            playerCardsElement.innerHTML = '';
+            dealerCardsElement.innerHTML = '';
+            playerCardsHTML.forEach(card => playerCardsElement.appendChild(card));
+            dealerCardsHTML.forEach(card => dealerCardsElement.appendChild(card));
+            playerScoreElement.innerText = `Счёт: ${calculateHandValue(playerHand)}`;
+            dealerScoreElement.innerText = `Счёт: ${calculateHandValue(dealerHand)}`;
+        }
+
+        function updateCounters() {
+            winsElement.innerText = `Победы: ${wins}`;
+            lossesElement.innerText = `Поражения: ${losses}`;
+            tiesElement.innerText = `Ничьи: ${ties}`;
+        }
+
+        function checkBlackjack() {
+            const playerValue = calculateHandValue(playerHand);
+            const dealerValue = calculateHandValue(dealerHand);
+
+            if (playerValue === 21 && dealerValue === 21) {
+                blackjackMessageElement.innerText = 'Ничья!';
+                ties++;
+                endGame();
+            } else if (playerValue === 21) {
+                blackjackMessageElement.innerText = 'Вы выиграли с Блэкджеком!';
+                wins++;
+                endGame();
+            } else if (dealerValue === 21) {
+                blackjackMessageElement.innerText = 'Дилер выиграл с Блэкджеком!';
+                losses++;
+                endGame();
+            }
+        }
+
+        function dealCards() {
+            playerHand = [getRandomCard(), getRandomCard()];
+            dealerHand = [getRandomCard(), getRandomCard()];
+            displayCards();
+            checkBlackjack();
+            blackjackMessageElement.innerText = '';
+            document.getElementById('dealButton').disabled = true;
+            document.getElementById('hitButton').disabled = false;
+            document.getElementById('standButton').disabled = false;
+        }
+
+        function hit() {
+            playerHand.push(getRandomCard());
+            displayCards();
+            const playerValue = calculateHandValue(playerHand);
+
+            if (playerValue > 21) {
+                blackjackMessageElement.innerText = 'Вы проиграли!';
+                losses++;
+                endGame();
+            }
+        }
+
+        function stand() {
+            let dealerValue = calculateHandValue(dealerHand);
+            while (dealerValue < 17) {
+                dealerHand.push(getRandomCard());
+                dealerValue = calculateHandValue(dealerHand);
+            }
+            displayCards();
+            determineWinner();
+        }
+
+        function determineWinner() {
+            const playerValue = calculateHandValue(playerHand);
+            const dealerValue = calculateHandValue(dealerHand);
+
+            if (dealerValue > 21 || playerValue > dealerValue) {
+                blackjackMessageElement.innerText = 'Вы выиграли!';
+                wins++;
+            } else if (playerValue === dealerValue) {
+                blackjackMessageElement.innerText = 'Ничья!';
+                ties++;
+            } else {
+                blackjackMessageElement.innerText = 'Дилер выиграл!';
+                losses++;
+            }
+            endGame();
+        }
+
+        function endGame() {
+            updateCounters();
+            document.getElementById('dealButton').disabled = false;
+            document.getElementById('hitButton').disabled = true;
+            document.getElementById('standButton').disabled = true;
+        }
+    </script>
+</body>
+</html>
