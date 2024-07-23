@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detective Simulator</title>
-    <meta name="description" content="Текстовый процедурно-генерируемый симулятор детектива.">
+    <meta name="description" content="Текстовый процедурно-генерируемый симулятор детектива с возможностью установки веб-приложения на ваше устройство.">
     <meta name="keywords" content="игра, симулятор, детектив, процедурная генерация, текстовая игра">
     <meta name="robots" content="index, follow">
     <link rel="icon" type="image/png" sizes="192x192" href="favicons/android-chrome-192x192.png">
@@ -34,6 +34,13 @@
             <span class = "close" onclick="closeNewGameModal()">&times;</span>
             <h2>Сводки</h2>
             <p id = "crimeText" style="text-align:left;"></p>
+        </div>
+    </div>
+    <div id="endGameModal" class="custom-modal">
+        <div class="modal-content">
+            <span class = "close" onclick="closeEndGameModal()">&times;</span>
+            <h2>Сводки</h2>
+            <p id = "crimeText_" style="text-align:left;"></p>
         </div>
     </div>
     <h2>Доска расследований</h2>
@@ -360,6 +367,7 @@
             <p style="text-align:left;">0.1 (а) - первый альфа-релиз.</p>
             <p style="text-align:left;">0.2 (а) - исправление ошибок.</p>
             <p style="text-align:left;">0.3 (а) - добавление сводок перед началом игры, а также мелкие исправления.</p>
+            <p style="text-align:left;">0.31 (а) - косметические изменения и добавление сводок после окончания игры.</p>
         </div>
     </div>
     <div class="music-controls">
