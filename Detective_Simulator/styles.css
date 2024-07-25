@@ -588,3 +588,55 @@ a {
 .custom-modal.hide .modal-content {
     animation: fadeOut 0.3s ease;
 }
+
+
+/* Новые стили для модального окна осмотра мобильного телефона жертвы */
+.victim-phone-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.victim-phone-dialogs {
+    width: 45%;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+.victim-phone-dialogs .dialog {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.victim-phone-content {
+    width: 70%;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+/* Добавьте другие стили по необходимости */
+
+.message {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+/* Align messages from the victim to the right */
+.message.victim {
+    background-color: #e0f7fa;
+    align-self: flex-end;
+    color: black;
+}
+
+/* Align messages from the interlocutor to the left */
+.message.interlocutor {
+    background-color: #f0f4c3;
+    align-self: flex-start;
+    color: black;
+}

@@ -5,25 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detective Simulator</title>
-
-    <meta property="og:url" content="https://vyachikx.github.io/Detective_Simulator/index.html">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Detective Simulator">
-    <meta property="og:description" content="Текстовый процедурно-генерируемый симулятор детектива с возможностью установки веб-приложения на ваше устройство.">
-    <meta property="og:image" content="favicons/snippet.png">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="twitter:domain" content="vyachikx.github.io">
-    <meta property="twitter:url" content="https://vyachikx.github.io/Detective_Simulator/index.html">
-    <meta name="twitter:title" content="Detective Simulator">
-    <meta name="twitter:description" content="Текстовый процедурно-генерируемый симулятор детектива с возможностью установки веб-приложения на ваше устройство.">
-    <meta name="twitter:image" content="favicons/snippet.png">
-
     <meta name="description" content="Текстовый процедурно-генерируемый симулятор детектива с возможностью установки веб-приложения на ваше устройство.">
     <meta name="keywords" content="игра, симулятор, детектив, процедурная генерация, текстовая игра">
     <meta name="robots" content="index, follow">
-
-    <link rel="icon" type="image/png" sizes="120x120" href="favicons/apple-touch-icon-120x120.png"><!-- Для Яндекса -->
     <link rel="icon" type="image/png" sizes="192x192" href="favicons/android-chrome-192x192.png">
     <link rel="apple-touch-icon" href="favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
@@ -141,11 +125,34 @@
             <button onclick="searchForEvidence()">Поиск улик на месте происшествия</button>
             <button onclick="searchForTheCrimeWeapon()">Поиск орудия преступления</button>
             <button onclick="expertise()">Узнать время убийства</button>
+            <button onclick="openVictimPhoneModal()">Прочитать диалоги жертвы</button>
+        </div>
+         <div id="victimPhoneModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeVictimPhoneModal()">&times;</span>
+                <h2>Диалоги жертвы</h2>
+                <div class="victim-phone-container">
+                    <div class="victim-phone-dialogs">
+                        <!-- Тут будет контент!!! -->
+                    </div>
+                    <div class="victim-phone-content">
+                        <!-- Тут будет контент!!! -->
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="investigative-actions-submenu" class="submenu">
             <button onclick="inspectionVictimsResidence()">Осмотр места жительства жертвы</button>
             <button onclick="toggleInterrogateMenu()">Вызвать жителя на допрос</button>
             <button onclick="toggleAdminRequestMenu()">Создать запрос в администрацию локации</button>
+            <button onclick="toggleSurvRequestMenu()">Запросить записи с камер видеонаблюдения</button>
+            <button onclick="toggleReqResMenu()">Опознание людей с записей</button>
+        </div>
+        <div id="reqres-menu" class="submenu">
+            <select class="recordsOptions" style = "width: 75%;">
+                <!-- Тут будет контент!!! -->
+            </select>
+            <button onclick="recognizeResidents()">Послать записи</button>
         </div>
         <div id="interrogate-menu" class="submenu">
             <select class="residentsOptions">
@@ -167,7 +174,7 @@
             <select class="residentsOptionsL">
                 <!-- Тут будет контент!!! -->
             </select>
-            <select class="locationsOptionsL" style="width:70%">
+            <select class="locationsOptionsL">
                 <!-- Тут будет контент!!! -->
             </select>
             <button onclick="toggleSubMenu('admin-actions-submenu')">Создать запрос администрации</button>
@@ -175,6 +182,12 @@
                 <button onclick="checkIfResidentWasPresentAtMurder()">Узнать, был ли житель во время убийства в этом месте</button>
                 <button onclick="askAboutFriendsAtWork()">Спросить по поводу друзей-коллег жителя</button>
             </div>
+        </div>
+        <div id="surv-menu" class="submenu">
+            <select class="locationsSurvOptions" style = "width: 75%;">
+                <!-- Тут будет контент!!! -->
+            </select>
+            <button onclick="getSurveillanceCameraRecords()">Отправить запрос на счёт записей</button>
         </div>
         <div id="accuse-menu" class="submenu">
             <select class="residentsAccuse">
@@ -383,8 +396,10 @@
             <h3 style="text-align:center;">Версия игры:</h3>
             <p style="text-align:left;">0.1 (а) - первый альфа-релиз.</p>
             <p style="text-align:left;">0.2 (а) - исправление ошибок.</p>
-            <p style="text-align:left;">0.3 (а) - добавление сводок перед началом игры, а также мелкие исправления.</p>
-            <p style="text-align:left;">0.31 (а) - косметические изменения и добавление сводок после окончания игры.</p>
+            <p style="text-align:left;">0.3 (а) - добавлены сводки перед началом игры, а также мелкие исправления.</p>
+            <p style="text-align:left;">0.31 (а) - добавлены сводки после окончания игры и небольшие косметические изменения.</p>
+            <p style="text-align:left;">0.4 (а) - добавлен осмотр записей с камер видеонаблюдения.</p>
+            <p style="text-align:left;">0.5 (а) - добавлена возможность просматривать диалоги жертвы.</p>
         </div>
     </div>
     <div class="music-controls">
