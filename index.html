@@ -1,991 +1,515 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vyachik's site</title>
-    
-    <meta property="og:url" content="https://vyachikx.github.io/">
+    <title>Detective Simulator</title>
+
+    <meta property="og:url" content="https://vyachikx.github.io/Detective_Simulator/index.html">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Vyachik's site">
-    <meta property="og:description" content="Мой сайт-визитка для посетителей. Здесь вы узнаете некоторую информацию обо мне.">
-    <meta property="og:image" content="src/snippet.png">
+    <meta property="og:title" content="Detective Simulator">
+    <meta property="og:description" content="Текстовый процедурно-генерируемый симулятор детектива с возможностью установки веб-приложения на ваше устройство.">
+    <meta property="og:image" content="favicons/snippet.png">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="vyachix.github.io">
-    <meta property="twitter:url" content="https://vyachikx.github.io/">
-    <meta name="twitter:title" content="Vyachik's site">
-    <meta name="twitter:description" content="Мой сайт-визитка для посетителей. Здесь вы узнаете некоторую информацию обо мне.">
-    <meta name="twitter:image" content="src/snippet.png">
+    <meta property="twitter:url" content="https://vyachikx.github.io/Detective_Simulator/index.html">
+    <meta name="twitter:title" content="Detective Simulator">
+    <meta name="twitter:description" content="Текстовый процедурно-генерируемый симулятор детектива с возможностью установки веб-приложения на ваше устройство.">
+    <meta name="twitter:image" content="favicons/snippet.png">
 
-    <meta name="description" content="Мой сайт-визитка для посетителей. Здесь вы узнаете некоторую информацию обо мне.">
-    <meta name="keywords" content="Вячик, Vyachik, Vyachiq, сайт-визитка">
+    <meta name="description" content="Текстовый процедурно-генерируемый симулятор детектива с возможностью установки веб-приложения на ваше устройство.">
+    <meta name="keywords" content="игра, симулятор, детектив, процедурная генерация, текстовая игра">
     <meta name="robots" content="index, follow">
 
-    <link rel="icon" type="image/png" sizes="120x120" href="src/apple-icon-120x120.png"> <!-- Для Яндекса -->
-    <link rel="icon" type="image/png" sizes="192x192" href="src/android-chrome-192x192.png">
-    <link rel="apple-touch-icon" href="src/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="src/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="src/favicon-32x32.png">
-    <link rel="shortcut icon" href="src/favicon.ico">
-    <style>
-    /* Основные стили для скроллбара */
-    ::-webkit-scrollbar {
-      width: 12px;
-      background-color: #0f0f0f;
-    }
-    /* Ползунок скроллбара */
-    ::-webkit-scrollbar-thumb {
-      background: #00ff00;
-      border-radius: 10px;
-      border: 3px solid #0f0f0f;
-    }
-
-    /* Полосы прокрутки (верхняя и нижняя) */
-    ::-webkit-scrollbar-track {
-      background: #0f0f0f;
-      border-radius: 10px;
-    }
-
-    /* Стили для Firefox */
-    html {
-      scrollbar-width: thin;
-      scrollbar-color: #00ff00 #0f0f0f;
-      overflow-x: hidden;
-    }
-    body {
-        font-family: 'Courier New', Courier, monospace;
-        background: linear-gradient(120deg, #0d0d0d, #1a1a1a, #0d0d0d);
-        color: #00ff00;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
-    section {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        width: 90%;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 20px;
-        max-width: 1200px;
-    }
-
-    footer {
-        background-color: #2d2d2d;
-        text-align: center;
-        padding: 10px;
-        width: 100%;
-        position: relative;
-        margin-top: 20px;
-    }
-
-    .bubbles {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        z-index: -1;
-    }
-
-    .bubble {
-        position: absolute;
-        bottom: -50px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        box-shadow: inset -5px -5px 15px rgba(255, 255, 255, 0.3),
-                    inset 5px 5px 15px rgba(0, 0, 0, 0.1);
-        animation: rise 20s infinite ease-in-out;
-    }
-
-    .bubble:before {
-        content: '';
-        position: absolute;
-        top: 10%;
-        left: 10%;
-        width: 80%;
-        height: 80%;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 60%);
-        border-radius: 50%;
-    }
-
-    .bubble:nth-child(1) {
-        width: 40px;
-        height: 40px;
-        left: 10%;
-        animation-duration: 15s;
-        animation-delay: 0s;
-        background: rgba(173, 216, 230, 0.2);
-    }
-
-    .bubble:nth-child(2) {
-        width: 20px;
-        height: 20px;
-        left: 20%;
-        animation-duration: 25s;
-        animation-delay: 5s;
-        background: rgba(255, 182, 193, 0.2);
-    }
-
-    .bubble:nth-child(3) {
-        width: 50px;
-        height: 50px;
-        left: 25%;
-        animation-duration: 20s;
-        animation-delay: 3s;
-        background: rgba(144, 238, 144, 0.2);
-    }
-
-    .bubble:nth-child(4) {
-        width: 70px;
-        height: 70px;
-        left: 40%;
-        animation-duration: 20s;
-        animation-delay: 7s;
-        background: rgba(255, 215, 0, 0.2);
-    }
-
-    .bubble:nth-child(5) {
-        width: 30px;
-        height: 30px;
-        left: 55%;
-        animation-duration: 15s;
-        animation-delay: 2s;
-        background: rgba(238, 130, 238, 0.2);
-    }
-
-    .bubble:nth-child(6) {
-        width: 50px;
-        height: 50px;
-        left: 70%;
-        animation-duration: 25s;
-        animation-delay: 4s;
-        background: rgba(173, 216, 230, 0.2);
-    }
-
-    .bubble:nth-child(7) {
-        width: 80px;
-        height: 80px;
-        left: 80%;
-        animation-duration: 20s;
-        animation-delay: 6s;
-        background: rgba(255, 182, 193, 0.2);
-    }
-
-    @keyframes rise {
-        0% {
-            bottom: -50px;
-            opacity: 0.7;
-        }
-        50% {
-            opacity: 1;
-        }
-        100% {
-            bottom: 100vh;
-            opacity: 0;
-        }
-    }
-
-    .contacts-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-
-    .contact-item {
-        background-color: #0d0d0d;
-        border: 2px solid #00ff00;
-        margin: 10px 0;
-        padding: 10px;
-        border-radius: 10px;
-        width: 90%;
-        max-width: 500px;
-        display: flex;
-        align-items: center;
-    }
-
-    .contact-item a {
-        color: #00ff00;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        width: 100%;
-    }
-
-    .contact-item img {
-        width: 30px;
-        height: 30px;
-        margin-right: 10px;
-    }
-
-    #about {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .about-container {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
-        width: 90%;
-        max-width: 1200px;
-    }
-
-    .about-header {
-        padding: 40px;
-        margin-top: 20px;
-        background: #1a1a1a;
-        border-radius: 10px;
-        border: 2px solid #00ff00;
-        text-align: center;
-        position: relative;
-
-    }
-
-    .about-header img {
-        display: block;
-        max-width: 100%;
-        height: auto;
-        margin-top: 20px;
-        border-radius: 0;
-        box-shadow: 0 0 5px rgba(0, 255, 0, 0.5), 0 0 10px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.3);
-    }
-
-    .about-header h2 {
-        font-size: 26px;
-        margin-bottom: 20px;
-        color: #00ff00;
-    }
-
-    .about-section {
-        padding: 20px;
-        background: #1a1a1a;
-        border-radius: 10px;
-        border: 1px solid #00ff00;
-        margin-top: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .about-section h3 {
-        font-size: 22px;
-        margin-bottom: 10px;
-        color: #00ff00;
-        z-index: 1;
-    }
-
-    .about-section ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        z-index: 1;
-    }
-
-    .about-section ul li {
-        background: rgba(42, 42, 42, 0.8);
-        margin-bottom: 5px;
-        padding: 10px;
-        border-radius: 5px;
-        transition: background 0.3s;
-        font-size: 16px;
-    }
-
-    .about-section ul li:hover {
-        background: rgba(58, 58, 58, 0.8);
-    }
-
-    .about-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-size: cover;
-        background-position: center;
-        z-index: 0;
-        opacity: 0.2;
-    }
-
-    .hobbies::before {
-        background-image: url('src/hobby.jpg');
-    }
-
-    .music::before {
-        background-image: url('src/music.jpg');
-    }
-
-    .movies::before {
-        background-image: url('src/movies.jpg');
-    }
-
-    .books::before {
-        background-image: url('src/books.jpg');
-    }
-
-    .games::before {
-        background-image: url('src/games.jpg');
-    }
-
-    .computer-games::before {
-        background-image: url('src/computer_games.jpg');
-    }
-
-    .projects-container {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
-        width: 100%;
-        max-width: 1200px;
-    }
-
-    .project-item {
-        padding: 20px;
-        background: #1a1a1a;
-        border-radius: 10px;
-        border: 2px solid #00ff00;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .project-item h3 {
-        font-size: 22px;
-        margin-bottom: 10px;
-    }
-
-    .project-item p {
-        font-size: 16px;
-    }
-
-    .under-construction {
-        position: relative;
-        padding: 20px;
-        background: #1a1a1a;
-        border-radius: 10px;
-        border: 2px dashed #ff6600;
-        color: #ff6600;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .under-construction img {
-        width: 100px;
-        margin-bottom: 10px;
-    }
-
-    .under-construction:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 10px;
-        background: repeating-linear-gradient(
-            45deg,
-            #ff6600,
-            #ff6600 10px,
-            #000000 10px,
-            #000000 20px
-        );
-    }
-
-    .under-construction:after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 10px;
-        background: repeating-linear-gradient(
-            45deg,
-            #ff6600,
-            #ff6600 10px,
-            #000000 10px,
-            #000000 20px
-        );
-    }
-
-    @media (min-width: 810px) {
-        .about-container,
-        .projects-container {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        }
-    }
-
-    .project-link {
-        display: block;
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .project-link:hover {
-        color: inherit;
-    }
-
-    .project-link .project-item {
-        cursor: pointer;
-    }
-
-    #gallery {
-        text-align: center;
-        margin-top: 20px;
-        width: 90%;
-        max-width: 1200px;
-        padding: 20px;
-    }
-
-    .gallery-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 10px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .gallery-container img {
-        width: 100%;
-        height: auto;
-        display: block;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
-
-    .gallery-container img:hover {
-        transform: scale(1.05);
-    }
-
-    @media (min-width: 810px) {
-        .gallery-container {
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        }
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.9);
-    }
-
-    .modal-content {
-        margin: auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-    }
-
-    .modal-content {
-        animation-name: zoom;
-        animation-duration: 0.6s;
-    }
-
-    @keyframes zoom {
-        from {transform: scale(0)}
-        to {transform: scale(1)}
-    }
-
-    .close {
-        position: absolute;
-        top: 15px;
-        right: 35px;
-        color: #f1f1f1;
-        font-size: 40px;
-        font-weight: bold;
-        transition: 0.3s;
-        cursor: pointer;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: #bbb;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .caption {
-        text-align: center;
-        color: #ccc;
-        padding: 10px 0;
-        height: 150px;
-    }
-
-    .content-box {
-        padding: 20px;
-        background: #1a1a1a;
-        border-radius: 10px;
-        border: 2px solid #00ff00;
-        text-align: center;
-        width: 90%;
-        max-width: 1200px;
-        margin-top: 20px;
-    }
-
-
-    .audio-control {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        background-color: gray;
-        border-radius: 50%;
-        border: 2px solid #00ff00;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        z-index: 100;
-    }
-
-    .audio-control img {
-        width: 30px;
-        height: 30px;
-
-    }
-
-    .circle-container {
-        position: relative;
-        width: 150px;
-        height: 150px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 20px;
-        flex-direction: column;
-    }
-
-    .progress-circle {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        background: conic-gradient(var(--color) var(--percent), #333 0 100%);
-    }
-
-    .progress-circle .inner-circle {
-        position: absolute;
-        top: 10%;
-        left: 10%;
-        width: 80%;
-        height: 80%;
-        background-color: #2c2c2c;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 0 20px var(--color), 0 0 30px var(--color), 0 0 40px var(--color), 0 0 50px var(--color);
-    }
-
-    .progress-circle .percent {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #00ff00;
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    .progress-circle .label {
-        position: absolute;
-        bottom: -30px;
-        width: 100%;
-        text-align: center;
-        font-size: 18px;
-        color: #00ff00;
-    }
-
-    .progress-circle.python {
-        --color: rgba(0, 0, 255, 0.7);
-        --percent: 85%;
-    }
-
-    .progress-circle.html {
-        --color: rgba(255, 0, 0, 0.7);
-        --percent: 60%;
-    }
-
-    .progress-circle.javascript {
-        --color: rgba(255, 0, 255, 0.7);
-        --percent: 65%;
-    }
-
-    .progress-circle.csharp {
-        --color: rgba(0, 255, 255, 0.7);
-        --percent: 75%;
-    }
-
-    .progress-circle.java {
-        --color: rgba(0, 255, 0, 0.7);
-        --percent: 50%;
-    }
-</style>
+    <link rel="icon" type="image/png" sizes="120x120" href="favicons/apple-touch-icon-120x120.png"> <!-- Для Яндекса -->
+    <link rel="icon" type="image/png" sizes="192x192" href="favicons/android-chrome-192x192.png">
+    <link rel="apple-touch-icon" href="favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+    <link rel="shortcut icon" href="favicons/favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <div class="bubbles">
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
+    <div id="loader" class="loader">
+        <center>
+            <h2>Detective Simulator</h2>
+        </center>
+        <div class="loader-content">
+            <img class="loading" src="src/detective.png" alt="logo">
+            <div class="loader-text" style="position: relative;">
+                Загрузка...
+            </div>
+        </div>
     </div>
-    <div class="container">
-        <main id="content">
-            <section id="home" class="active">
-                <div class="content-box">
-                    <h1>Добро пожаловать!</h1>
-                    <p>Это мой сайт, посетя который вы узнаете полезную информацию обо мне!</p>
-                </div>
-            </section>
-            <section id="about">
-                <!-- <h1>Обо мне</h1> -->
-                <div class="about-container">
-                    <div class="about-header">
-                        <h2>Меня зовут Вячеслав</h2>
-                        <p>Vyachik (Вячик) — это мой ник, которым меня называют даже в жизни. По знаку зодиака я Стрелец.</p>
-                        <img id="my_photo" src="photos/i_1.jpg" alt="Моё фото">
-                    </div>
-                    <div class="about-section stack">
-                        <h3>Мой стек</h3>
-                        <div class="circle-container">
-                            <div class="progress-circle python" data-percent="85">
-                                <div class="inner-circle">
-                                    <div class="percent">85%</div>
-                                </div>
-                                <div class="label">Python</div>
-                            </div>
+    <div id="newGameModal" class="custom-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNewGameModal()">&times;</span>
+            <h2>Сводки</h2>
+            <p id="crimeText" style="text-align:left;"></p>
+        </div>
+    </div>
+    <div id="endGameModal" class="custom-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEndGameModal()">&times;</span>
+            <h2>Сводки</h2>
+            <p id="crimeText_" style="text-align:left;"></p>
+        </div>
+    </div>
+    <h2>Доска расследований</h2>
+    <div class="evidence-board container">
+        <div id="notes-container">
+            <!-- Тут будет контент!!! -->
+        </div>
+    </div>
+    <div class="actions container">
+        <button id="add-note-btn" onclick="openAddNoteModal()">Добавить заметку</button>
+    </div>
+    <div id="evidence-add-modal" class="modal">
+        <div class="modal-background" onclick="closeAddNoteModal()"></div>
+        <div class="modal-content">
+            <span class="close" onclick="closeAddNoteModal()">&times;</span>
+            <h2>Добавить заметку</h2>
+            <center><label for="note-title">Название:</label></center>
+            <center><input type="text" id="note-title" required><br></center>
+            <center><label for="note-content">Содержание:</label></center>
+            <center><textarea id="note-content" required></textarea><br></center>
+            <center><button onclick="addNote()">Прикрепить</button></center>
+        </div>
+    </div>
+    <div id="achievement" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAchievementsModal()">&times;</span>
+            <h2>Новое достижение</h2>
+            <div id="achievementContent">
+                <!-- Тут будет контент!!! -->
+            </div>
+        </div>
+    </div>
+    <div id="achievement1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAchievements1Modal()">&times;</span>
+            <h2>Новое достижение</h2>
+            <div id="achievementContent1">
+                <!-- Тут будет контент!!! -->
+            </div>
+        </div>
+    </div>
+    <div id="achievement2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAchievements2Modal()">&times;</span>
+            <h2>Новое достижение</h2>
+            <div id="achievementContent2">
+                <!-- Тут будет контент!!! -->
+            </div>
+        </div>
+    </div>
+    <div id="evidence-open-modal" class="modal">
+        <div class="modal-background" onclick="closeOpenNoteModal()"></div>
+        <div class="modal-content">
+            <span class="close" onclick="closeOpenNoteModal()">&times;</span>
+            <div id="note-details"></div>
+        </div>
+    </div>
+    <div class="victim-dossier container">
+        <!-- Тут будет контент!!! -->
+    </div>
+    <div class="suspect-dossier container">
+        <!-- Тут будет контент!!! -->
+    </div>
+    <h2>События</h2>
+    <div class="logs container">
+        <!-- Тут будет контент!!! -->
+    </div>
+    <div class="actions container">
+        <button onclick="toggleSubMenu('start-game-submenu')">Настройка города</button>
+        <button onclick="startGame()">Начать игру</button>
+        <div id="start-game-submenu" class="submenu">
+            Кол-во жителей: <input placeholder="натуральное число, ≥10" class="numResidents"><br>
+            <button onclick="generateCity()">Создать город</button><br>
+            Ключ генерации: <input placeholder="ключ" class="seedGen">
+            <button onclick="loadCity()">Загрузить город</button>
+            <button onclick="toggleSubMenu('addNewResident')">Добавить уникального жителя</button>
+            <div id="addNewResident" class="submenu">
+                <h3>Добавить уникального жителя <br> (экспериментальная функция)</h3>
+                Имя: <input type="text" id="residentName"><br>
+                Пол: <input type="text" id="residentGender"><br>
+                Место работы: <input type="text" id="residentWorkplace"><br>
+                Друзья: <input type="text" id="residentFriends" placeholder="генерируется само" disabled><br>
+                Враги: <input type="text" id="residentEnemies" placeholder="генерируется само" disabled><br>
+                Особые приметы:
+                <br>Цвет глаз: <input type="text" id="residentEyeColor"><br>
+                Цвет волос: <input type="text" id="residentHairColor"><br>
+                Размер обуви: <input type="number" id="residentShoeSize"><br>
+                Отпечатки пальцев: <input type="text" id="residentFingerprints"><br>
+                Алиби: <input type="text" id="residentAlibi"><br>
+                Локация алиби: <input type="text" id="residentAlibiLocation"><br>
+                Распорядок дня (обычный):
+                <textarea id="residentDailyRoutine" placeholder='{"08:00": "Действие", ...}'></textarea><br>
+                Распорядок дня (день убийства):
+                <textarea id="residentMurderDayRoutine" placeholder='{"08:00": "Действие", ...}'></textarea><br>
+                Домашний адрес: <input type="text" id="residentHouse"><br>
+                Номер телефона: <input type="text" id="residentPhoneNumber"><br>
+                <button onclick="addResident()">Добавить жителя</button>
+            </div>
+        </div>
+    </div>
+    <div class="actions container">
+        <button onclick="saveGame()">Сохранить игру</button>
+        <button onclick="clearDatabase();window.location.href=''">Сбросить игру</button>
+    </div>
+    <div class="actions container">
+        <div class="actions container">
+            <button onclick="toggleSubMenu('crime-scene-submenu')">Осмотр места происшествия</button>
+            <button onclick="toggleSubMenu('investigative-actions-submenu')">Следственные действия</button>
+            <button onclick="toggleAccuseMenu()">Предъявление обвинения</button>
+            <div id="crime-scene-submenu" class="submenu">
+                <button onclick="inspectBody();expertise()">Судебно-медицинская экспертиза</button>
+                <button onclick="searchForEvidence();searchForTheCrimeWeapon()">Поиск улик</button>
+                <button onclick="searchForTheWeaponFingerprints()">Дактилоскопическая экспертиза орудия преступления</button>
+                <button onclick="searchForTraces()">Трасологическая экспертиза</button>
+                <button onclick="openVictimPhoneModal()">Компьютерно-техническая экспертиза</button>
+                <button onclick="interviewingWitnesses()">Опрос свидетелей</button>
+            </div>
+            <div id="victimPhoneModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeVictimPhoneModal()">&times;</span>
+                    <h2>Телефонные записи жертвы</h2>
+                    <div class="victim-phone-container">
+                        <div class="victim-phone-dialogs">
+                            <!-- Тут будет контент!!! -->
                         </div>
-                        <div class="circle-container">
-                            <div class="progress-circle html" data-percent="60">
-                                <div class="inner-circle">
-                                    <div class="percent">60%</div>
-                                </div>
-                                <div class="label">HTML</div>
-                            </div>
+                        <div class="victim-phone-content">
+                            <!-- Тут будет контент!!! -->
                         </div>
-                        <div class="circle-container">
-                            <div class="progress-circle javascript" data-percent="65">
-                                <div class="inner-circle">
-                                    <div class="percent">65%</div>
-                                </div>
-                                <div class="label">JavaScript</div>
-                            </div>
-                        </div>
-                        <div class="circle-container">
-                            <div class="progress-circle csharp" data-percent="75">
-                                <div class="inner-circle">
-                                    <div class="percent">75%</div>
-                                </div>
-                                <div class="label">C#</div>
-                            </div>
-                        </div>
-                        <div class="circle-container">
-                            <div class="progress-circle java" data-percent="50">
-                                <div class="inner-circle">
-                                    <div class="percent">50%</div>
-                                </div>
-                                <div class="label">Java</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="about-section hobbies">
-                        <h3>Интересы и хобби</h3>
-                        <ul>
-                            <li>Программирование</li>
-                            <li>Математика</li>
-                            <li>Изучение языков</li>
-                            <li>Шахматы</li>
-                            <li>Небольшое увлечение фотографией</li>
-                            <li>Любительская астрономия</li>
-                            <li>Редкое влечение к писательству</li>
-                        </ul>
-                    </div>
-                    <div class="about-section music">
-                        <h3>Предпочтения в музыке</h3>
-                        <ul>
-                            <li>Rammstein</li>
-                            <li>Тони Раут</li>
-                            <li>Ost+Front</li>
-                            <li>Lida</li>
-                            <li>GSPD/DEAD BLONDE</li>
-                            <li>Molchat Doma</li>
-                            <li>Neverlove</li>
-                            <li>Chernikovskaya Hata</li>
-                            <li>Maria Kon</li>
-                            <li>SQWOZ BAB</li>
-                            <li>АДЛИН</li>
-                            <li>ЛСП</li>
-                            <li>Гарри Топор</li>
-                        </ul>
-                    </div>
-                    <div class="about-section movies">
-                        <h3>Видео и фильмы</h3>
-                        <ul>
-                            <li>KuplinovPlay, YouTube</li>
-                            <li>Чернобыль. Зона отчуждения, 2014 г.</li>
-                            <li>Зачарованные, 1998 г.</li>
-                            <li>Один дома, 1990 г.</li>
-                            <li>Пассажир, 2018 г.</li>
-                            <li>Терминал, 2004 г.</li>
-                            <li>Хитмэн, 2007 г.</li>
-                        </ul>
-                    </div>
-                    <div class="about-section books">
-                        <h3>Книги</h3>
-                        <ul>
-                            <li>Жюль Верн, «Таинственный остров»</li>
-                            <li>Жорж Сименон, «Комиссар Мегрэ»</li>
-                            <li>Виктор Гюго, «Человек, который смеётся»</li>
-                            <li>Александр Беляев, «Голова профессора Доуэля»</li>
-                            <li>Герберт Уэллс, «Машина времени»</li>
-                            <li>Агата Кристи, «Потерянный ключ»</ли>
-                            <li>Эдгар Берроуз, «Тарзан — приёмыш обезьян»</li>
-                        </ul>
-                    </div>
-                    <div class="about-section games">
-                        <h3>Настольные и коллективные игры</h3>
-                        <ul> 
-                            <li>Шахматы</li>
-                            <li>Мафия</li>
-                            <li>Uno</li>
-                            <li>Дурак</li>
-                            <li>Шашки</ли>
-                        </ul>
-                    </div>
-                    <div class="about-section computer-games">
-                        <h3>Компьютерные игры</h3>
-                        <ul>
-                            <li>S.T.A.L.K.E.R</li>
-                            <li>Life is Strange</li>
-                            <li>Postal 2</li>
-                            <li>World of Tanks</li>
-                            <li>Silent Hill</li>
-                            <li>Dead by Daylight</li>
-                            <li>GTA 3</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-            <section id="gallery">
-                <!-- <h1>Фотогалерея</h1> -->
-                <div class="content-box">
-                    <h1>Фотогалерея</h1>
-                    <div class="gallery-container">
-                        <img src="photos/1.jpg" alt="Photo 1" onclick="openModal(this)">
-                        <img src="photos/2.jpg" alt="Photo 2" onclick="openModal(this)">
-                        <img src="photos/3.jpg" alt="Photo 3" onclick="openModal(this)">
-                        <img src="photos/4.jpg" alt="Photo 4" onclick="openModal(this)">
-                        <img src="photos/5.jpg" alt="Photo 5" onclick="openModal(this)">
-                        <img src="photos/6.jpg" alt="Photo 6" onclick="openModal(this)">
-                        <img src="photos/7.jpg" alt="Photo 7" onclick="openModal(this)">
-                        <img src="photos/8.jpg" alt="Photo 8" onclick="openModal(this)">
-                        <img src="photos/9.jpg" alt="Photo 9" onclick="openModal(this)">
-                        <img src="photos/10.jpg" alt="Photo 10" onclick="openModal(this)">
-                        <img src="photos/11.jpg" alt="Photo 11" onclick="openModal(this)">
-                        <img src="photos/12.jpg" alt="Photo 12" onclick="openModal(this)">
-                        <img src="photos/13.jpg" alt="Photo 13" onclick="openModal(this)">
-                        <img src="photos/14.jpg" alt="Photo 14" onclick="openModal(this)">
-                        <img src="photos/15.jpg" alt="Photo 15" onclick="openModal(this)">
-                        <img src="photos/16.jpg" alt="Photo 16" onclick="openModal(this)">
-                        <img src="photos/17.jpg" alt="Photo 17" onclick="openModal(this)">
-                        <img src="photos/18.jpg" alt="Photo 18" onclick="openModal(this)">
-                        <img src="photos/19.jpg" alt="Photo 19" onclick="openModal(this)">
-                        <img src="photos/20.jpg" alt="Photo 20" onclick="openModal(this)">
                     </div>
                 </div>
-            </section>
-            <section id="projects">
-                <h1>Мои проекты</h1>
-                <div class="projects-container">
-                    <a href="Detective_Simulator/index.html" class="project-link" target="_blank">
-                        <div class="project-item">
-                            <img style = "width:256px;height:256px;" src="src/detective.png" alt="Project 1">
-                            <h3>Симулятор детектива</h3>
-                            <p>Текстовый иммерсивный симулятор детектива, доступный для установки в качестве веб-приложения.</p>
-                        </div>
-                    </a>
-                    <a href="projects/anonchat.html" class="project-link" target="_blank">
-                        <div class="project-item">
-                            <img src="src/anonchat.png" alt="Project 2">
-                            <h3>Анонимный чат</h3>
-                            <p>Анонимный чат между двумя пользователями: минимализм, лаконичность и ничего лишнего.</p>
-                        </div>
-                    </a>
-                    <a href="projects/jsinterpreter.html" class="project-link" target="_blank">
-                        <div class="project-item">
-                            <img src="src/jsinterpreter.png" alt="Project 3">
-                            <h3>Интерпретатор JavaScript</h3>
-                            <p>Простой браузерный интерпретатор языка JavaScript.</p>
-                        </div>
-                    </a>
-                    <a href="projects/pizzasim.html" class="project-link" target="_blank">
-                        <div class="project-item">
-                            <img src="src/pizzasim.png" alt="Project 4">
-                            <h3>Симулятор пиццерии</h3>
-                            <p>Небольшой проект, в котором нужно готовить пиццу.</p>
-                        </div>
-                    </a>
-                    <a href="projects/calendar.html" class="project-link" target="_blank">
-                        <div class="project-item">
-                            <img src="src/calendar.png" alt="Project 5">
-                            <h3>Календарь</h3>
-                            <p>JS-генерируемый календарь на текущий год.</p>
-                        </div>
-                    </a>
-                    <a href="projects/blackjack.html" class="project-link" target="_blank">
-                        <div class="project-item">
-                            <img src="src/blackjack.png" alt="Project 6">
-                            <h3>Блэкджек</h3>
-                            <p>Реализация логики работы игры Блэкджек (21).</p>
-                        </div>
-                    </a>
-                    <a href="projects/tic-tac-toe.html" class="project-link" target="_blank">
-                        <div class="project-item">
-                            <img src="src/tic-tac-toe.png" alt="Project 7">
-                            <h3>Крестики-нолики</h3>
-                            <p>Анализ игры "Крестики-нолики</p>
-                        </div>
-                    </a>
-                    <a href="projects/htmlviewer.html" class="project-link" target="_blank">
-                        <div class="project-item">
-                            <img src="src/htmlviewer.png" alt="Project 8">
-                            <h3>HTML-редактор сайта</h3>
-                            <p>Редактор исходного кода сайта вместе с живым превью.</p>
-                        </div>
-                    </a>
-                    <a href="projects/cluedo.html" class="project-link" target="_blank">
-                        <div class="under-construction">
-                            <img src="https://via.placeholder.com/100x100" alt="Under Construction">
-                            <h3>Клуедо (в разработке)</h3>
-                            <p>Игра клуедо сейчас разрабатывается.</p>
-                        </div>
-                    </a>
-                    <div class="under-construction">
-                        <img src="https://via.placeholder.com/100x100" alt="Under Construction">
-                        <h3>? (в разработке)</h3>
-                        <p>Этот проект сейчас активно разрабатывается. Следите за обновлениями!</p>
+            </div>
+            <div id="investigative-actions-submenu" class="submenu">
+                <button onclick="inspectionVictimsResidence()">Осмотр места жительства жертвы</button>
+                <button onclick="toggleInterrogateMenu()">Допрос подозреваемого</button>
+                <button onclick="toggleAdminRequestMenu()">Запрос в администрацию</button>
+                <button onclick="toggleSurvRequestMenu()">Запрос записи с видеокамер</button>
+                <button onclick="toggleReqResMenu()">Видеотехническая экспертиза</button>
+            </div>
+            <div id="reqres-menu" class="submenu">
+                <select class="recordsOptions" style="width: 75%;">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <button onclick="recognizeResidents()">Идентификация лиц на видеозаписях</button>
+            </div>
+            <div id="interrogate-menu" class="submenu">
+                <select class="residentsOptions">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <button onclick="toggleSubMenu('interrogation-actions-submenu')">Процесс допроса</button>
+                <div id="interrogation-actions-submenu" class="submenu">
+                    <button onclick="takeFingerprints()">Дактилоскопическая экспертиза</button>
+                    <button onclick="conductExternalExamination()">Проведение личного досмотра</button>
+                    <button onclick="getFriendsAndEnemiesInfo()">Выявление связей с друзьями и врагами</button>
+                    <button onclick="askAboutVictimConnections()">Расследование связей жертвы</button>
+                    <button onclick="getDailySchedule()">Изучение распорядка дня</button>
+                    <button onclick="checkForAlibi()">Установление алиби</button>
+                    <button onclick="getWorkplaceNHouse()">Установление места жительства и работы</button>
+                    <button onclick="conductSearch()">Проведение обыска</button>
+                </div>
+            </div>
+            <div id="admin-request-menu" class="submenu">
+                <select class="residentsOptionsL">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <select class="locationsOptionsL">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <button onclick="toggleSubMenu('admin-actions-submenu')">Формирование запроса в администрацию</button>
+                <div id="admin-actions-submenu" class="submenu">
+                    <button onclick="checkIfResidentWasPresentAtMurder()">Проверка нахождения жителя в указанное время в локации</button>
+                    <button onclick="askAboutFriendsAtWork()">Запрос информации о коллегах жителя</button>
+                </div>
+            </div>
+            <div id="surv-menu" class="submenu">
+                <select class="locationsSurvOptions" style="width: 75%;">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <button onclick="getSurveillanceCameraRecords()">Запрос на получение записи с видеокамер</button>
+            </div>
+        </div>
+        <div id="accuse-menu" class="submenu">
+            <select class="residentsAccuse">
+                <!-- Тут будет контент!!! -->
+            </select>
+            <select class="weaponsAccuse">
+                <!-- Тут будет контент!!! -->
+            </select>
+            <select class="motiveAccuse">
+                <!-- Тут будет контент!!! -->
+            </select>
+            <button onclick="accuseResident()">Обвинить жителя</button>
+        </div>
+        <div id="endGameModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEndGameModal()">&times;</span>
+                <h2 id="endGameHeader"></h2>
+                <p id="endGameMessage"></p>
+            </div>
+        </div>
+    </div>
+    <div class="actions container">
+        <button onclick="openNotebookModal()">Блокнот</button>
+        <button onclick="openPhoneModal()">Телефон</button>
+        <button onclick="openTVModal()">Телевизор</button>
+    </div>
+    <div id="tvModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTvModal()">&times;</span>
+            <div class="tv-frame">
+                <div class="tv-screen" id="tvScreen">
+                    <div class="channel-logo" id="channelLogo">
+                        <!-- Тут будет контент!!! -->
+                    </div>
+                    <div class="tv-ticker" id="tvTicker">
+                        <!-- Тут будет контент!!! -->
                     </div>
                 </div>
-            </section>
-            <section id="contacts" class="contacts-container">
-                <h1>Контакты</h1>
-                <ul class="contacts-list">
-                    <li class="contact-item">
-                        <a href="https://t.me/vyachiq" target="_blank">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
-                            Telegram: @vyachiq
-                        </a>
-                    </li>
-                    <li class="contact-item">
-                        <a href="https://vk.com/vyachiq" target="_blank">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/VK.com-logo.svg" alt="VK">
-                            VK: @vyachiq
-                        </a>
-                    </li>
-                    <li class="contact-item">
-                        <a href="https://lichess.org/@/VyachikChess" target="_blank">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Lichess_Logo.svg" alt="Lichess">
-                            Lichess: VyachikChess
-                        </a>
-                    </li>
-                    <li class="contact-item">
-                        <a href="https://github.com/VyachikX" target="_blank">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub">
-                            GitHub: VyachikX
-                        </a>
-                    </li>
-                </ul>
-            </section>
-        </main>
-        <footer>
-            <p>&copy; Vyachik, <br> 2024</p>
-        </footer>
+                <div class="tv-model">Vyachik-TV</div>
+                <button class="channel-button left" onclick="prevChannel()">←</button>
+                <button class="power-button" onclick="toggleTV()"></button>
+                <button class="channel-button right" onclick="nextChannel()">→</button>
+            </div>
+        </div>
     </div>
-    <audio id="main_music" type="audio/mpeg" autoplay loop>
-        <source src="src/main_music.mp3"> <!-- Music: JJos feat Fede García "Evolution" (Ambient Mix) -->
-    </audio>
-    <div id="myModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="img01">
-        <div class="caption" id="caption"></div>
+    <div id="notebookModal" class="modal">
+        <div class="modal-content notebook">
+            <span class="close" onclick="closeNotebookModal()">&times;</span>
+            <h2>Блокнот</h2>
+            <div class="notebook-content">
+                <!-- Тут будет контент!!! -->
+            </div>
+        </div>
     </div>
-    <div class="audio-control" id="audio-control" onclick="toggleAudio()">
-        <img src="src/music_off.png" alt="Music Control">
+    <div id="phoneModal" class="modal">
+        <div class="modal-content">
+            <div class="phone-simulator">
+                <div class="phone-screen">
+                    <span class="close" onclick="closePhoneModal()">&times;</span>
+                    <center><input type="text" id="phoneNumberInput" placeholder="Введите номер..."></center>
+                    <br>
+                    <div class="phone-keypad">
+                        <div class="phone-row">
+                            <div class="phone-key" onclick="appendToPhoneNumber('1')">1</div>
+                            <div class="phone-key" onclick="appendToPhoneNumber('2')">2<br>ABC</div>
+                            <div class="phone-key" onclick="appendToPhoneNumber('3')">3<br>DEF</div>
+                        </div>
+                        <div class="phone-row">
+                            <div class="phone-key" onclick="appendToPhoneNumber('4')">4<br>GHI</div>
+                            <div class="phone-key" onclick="appendToPhoneNumber('5')">5<br>JKL</div>
+                            <div class="phone-key" onclick="appendToPhoneNumber('6')">6<br>MNO</div>
+                        </div>
+                        <div class="phone-row">
+                            <div class="phone-key" onclick="appendToPhoneNumber('7')">7<br>PQRS</div>
+                            <div class="phone-key" onclick="appendToPhoneNumber('8')">8<br>TUV</div>
+                            <div class="phone-key" onclick="appendToPhoneNumber('9')">9<br>WXYZ</div>
+                        </div>
+                        <div class="phone-row">
+                            <div class="phone-key" onclick="appendToPhoneNumber('*')">*</div>
+                            <div class="phone-key" onclick="appendToPhoneNumber('0')">0</div>
+                            <div class="phone-key" onclick="appendToPhoneNumber('#')">#</div>
+                        </div>
+                        <div class="phone-row">
+                            <div class="phone-key" onclick="removeLastDigit()"><img src="src/backspace.png" alt="Backspace"></div>
+                        </div>
+                        <div class="phone-row">
+                            <div class="phone-call" onclick="makePhoneCall()">Позвонить</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="messages" style="display: flex; flex-direction: column;"></div>
+            </div>
+        </div>
     </div>
+    <div class="residents-dossier container" id="residents-dossier">
+        <h2 class="dossier-header">Досье жителей</h2>
+        <div class="dossier-carusel">
+            <!-- Тут будет контент!!! -->
+        </div>
+    </div>
+    <div class="address-book container" id="address-book">
+        <h2 class="address-book-header">Телефонный справочник</h2>
+        <div class="address-entry-carusel">
+            <!-- Тут будет контент!!! -->
+        </div>
+    </div>
+    <div class="actions container">
+        <button onclick="openHelpModal()">Помощь</button>
+        <button onclick="showHint()">Подсказка</button><br>
+        <button onclick="openAboutModal()">Об игре</button>
+    </div>
+    <div class="actions container">
+        <button onclick="openStatisticsModal()">Статистика</button>
+    </div>
+    <div id="statistics" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeStatisticsModal()">&times;</span>
+            <h2>Статистика</h2>
+            <ul>
+                <li id="allStats"></li>
+                <li id="full"></li>
+                <li id="half"></li>
+                <li id="unsolved"></li>
+            </ul>
+            <div id="achievements">
+                <!-- Тут будет контент!!! -->
+            </div>
+        </div>
+    </div>
+    <div id="hintBox" class="hint-box">
+        <!-- Тут будет контент!!! -->
+    </div>
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeHelpModal()">&times;</span>
+            <h2>Помощь</h2>
+            <h2>Основные правила игры:</h2>
+            <ol>
+                <li>
+                    <strong>Создание города и его жителей</strong>:
+                    <ul>
+                        <li>В начале игры генерируется уникальный город с определенным количеством жителей, каждый из которых имеет свои уникальные характеристики и истории.</li>
+                        <li>Каждый житель обладает набором параметров, таких как имя, пол, место работы, друзья, враги, отличительные черты, отпечатки пальцев, алиби, статус свидетеля, расписание на обычный день и на день убийства, дом и номер телефона.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Выбор жертвы и убийцы</strong>:
+                    <ul>
+                        <li>В каждом игровом раунде случайным образом выбирается жертва и убийца.</li>
+                        <li>Жертва и убийца получают подробные профили, включающие время и место убийства, орудие преступления и мотив.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Сбор улик</strong>:
+                    <ul>
+                        <li>Игра предоставляет множество видов улик, таких как записки, орудия убийства, показания очевидцев, алиби жителей, друзья и враги жертвы, осмотр тела жертвы, следы обуви и многое другое.</li>
+                        <li>Улики помогают игрокам анализировать события и делать выводы о том, кто является убийцей.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Анализ и расследование</strong>:
+                    <ul>
+                        <li>Используйте улики, чтобы определить, кто из жителей говорит правду, а кто пытается скрыть свою вину.</li>
+                        <li>Внимательно анализируйте расписание жителей, их алиби и связи с другими жителями.</li>
+                        <li>Раскрывайте мотивы преступления, исследуя отношения между жителями и выявляя их скрытые тайны.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Интерактивность и вовлеченность</strong>:
+                    <ul>
+                        <li>Вовлекайте себя в интерактивные допросы, изучайте места преступлений и собирайте доказательства.</li>
+                        <blockquote>Истина редко бывает чистой и никогда не бывает простой. – Оскар Уайльд</blockquote>
+                        <li>Используйте свой детективный талант, чтобы связать все улики воедино и вычислить убийцу.</li>
+                    </ul>
+                </li>
+            </ol>
+            <h2>Советы для успешного расследования:</h2>
+            <ul>
+                <li>
+                    <strong>Внимание к деталям</strong>:
+                    <ul>
+                        <li>Обращайте внимание на мелочи, которые могут показаться незначительными на первый взгляд.</li>
+                        <li>Проверяйте алиби жителей, сопоставляя их с реальными событиями.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Логическое мышление</strong>:
+                    <ul>
+                        <li>
+                            <blockquote>Логика – это только начало мудрости, а не конец. – Леонард Нимой</blockquote>
+                        </li>
+                        <li>Используйте логику, чтобы исключить невиновных и выявить противоречия в показаниях.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Командная работа</strong>:
+                    <ul>
+                        <li>Обсуждайте свои выводы с другими игроками.</li>
+                        <li>Делитесь находками и гипотезами, чтобы вместе прийти к истине.</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>Помните,
+            <blockquote>Всякий, кто скрывает правду, в конце концов сам становится её жертвой. – Агата Кристи</blockquote> Удачи вам в расследованиях!</p>
+        </div>
+    </div>
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAboutModal()">&times;</span>
+            <h2>Об игре</h2>
+            <p style="text-align:left;">Эта игра представляет собой симулятор детектива, где вы будете разгадывать преступления и искать улики.</p>
+            <p style="text-align:left;"><strong>Предупреждение:</strong> все персонажи, локации и другие упоминания, используемые в игре, являются совершенно случайными: в контексте игры — процедурно-генерируемыми.</p>
+            <p style="text-align:left;">Для лучшего игрового опыта установите игру как PWA.</p>
+            <h3 style="text-align:center;">Особенности игры:</h3>
+            <ul>
+                <li>Разнообразные методы расследования: допросы, поиск улик, анализ данных.</li>
+                <li>Взаимодействие с уникальными жителями в процедурно-генерируемом городе.</li>
+                <li>Интерактивные места преступлений и допросы подозреваемых.</li>
+                <li>Глубокая система следствия с возможностью принятия решений.</li>
+                <li>Удобный текстовый интерфейс в связке с приятным оформлением.</li>
+                <li>Система сохранения игры.</li>
+                <li>Статистика и достижения.</li>
+            </ul>
+            <h3 style="text-align:center;">Разработчик:</h3>
+            <p style="text-align:left;">Игра создана одним человеком с ником Vyachiq (Вячеслав Пчеленок). Обо мне можно узнать <a href="https://vyachikx.github.io">здесь</a>.</p>
+            <h3 style="text-align:center;">Версия игры:</h3>
+            <p style="text-align:left;">0.1 (а) - первый альфа-релиз.</p>
+            <p style="text-align:left;">0.2 (а) - исправлены ошибки.</p>
+            <p style="text-align:left;">0.3 (а) - добавлены сводки перед началом игры, а также исправлены мелкие ошибки.</p>
+            <p style="text-align:left;">0.31 (а) - добавлены сводки после окончания игры и небольшие косметические изменения.</p>
+            <p style="text-align:left;">0.4 (а) - добавлен осмотр записей с камер видеонаблюдения.</p>
+            <p style="text-align:left;">0.5 (а) - добавлена возможность просматривать диалоги жертвы.</p>
+            <p style="text-align:left;">0.6 (а) - добавлено сохранение игры.</p>
+            <p style="text-align:left;" onclick='addAchievementAndShowModal("Разработчик", "Вы нашли cекретное достижение.")'>0.7 (а) - добавлена статистика и достижения.</p>
+            <p style="text-align:left;">0.8 (а) - обновлены названия кнопок.</p>
+            <p style="text-align:left;">0.81 (а) - исправлены ошибки отображения.</p>
+        </div>
+    </div>
+    <div class="music-controls">
+        <div class="music-icon-container">
+            <img id="music-toggle" src="src/music_off.png" alt="Music" onclick="toggleMusic()">
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="game.js"></script>
     <script>
-        var audio = document.getElementById("main_music");
-        var audioControl = document.getElementById("audio-control");
-        var audioPlaying = false;
-            function openModal(element) {
-        var modal = document.getElementById("myModal");
-        var modalImg = document.getElementById("img01");
-        var captionText = document.getElementById("caption");
-        modal.style.display = "block";
-        modalImg.src = element.src;
-        captionText.innerHTML = "Фотография";
-    }
-
-    function closeModal() {
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    }
-
-    function toggleAudio() {
-        audioPlaying = !audioPlaying;
-        if (audioPlaying) {
-            audio.play();
-            audioControl.innerHTML = '<img src="src/music_on.png" alt="Music Control">';
-            audioControl.style.backgroundColor = "red";
-        } else {
-            audio.pause();
-            audioControl.innerHTML = '<img src="src/music_off.png" alt="Music Control">';
-            audioControl.style.backgroundColor = "gray";
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(function () {
+                document.querySelector('.loader-text').style.display = 'none';
+            }, 2300)
+            setTimeout(function () {
+                document.body.classList.add('loaded');
+                document.querySelector('.loader').style.display = 'none';
+            }, 4100);
+        });
+    </script>
+    <script>
+        checkAndLoadState();
+        setupCaseStatisticsDatabase();
+        setupAchievementsDatabase();
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('SW registered: ', registration);
+                }).catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
+            });
         }
-    }
-</script>
+    </script>
 </body>
+
 </html>
+
+<!-- TUM0NU1UUTNORE0yTURZeU5qTXdOek15ZkRFd01EQjJlV0ZqYUdseA== -->
