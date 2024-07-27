@@ -5,9 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detective Simulator</title>
+
+    <meta property="og:url" content="https://vyachikx.github.io/Detective_Simulator/index.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Detective Simulator">
+    <meta property="og:description" content="Текстовый процедурно-генерируемый симулятор детектива с возможностью установки веб-приложения на ваше устройство.">
+    <meta property="og:image" content="favicons/snippet.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="vyachix.github.io">
+    <meta property="twitter:url" content="https://vyachikx.github.io/Detective_Simulator/index.html">
+    <meta name="twitter:title" content="Detective Simulator">
+    <meta name="twitter:description" content="Текстовый процедурно-генерируемый симулятор детектива с возможностью установки веб-приложения на ваше устройство.">
+    <meta name="twitter:image" content="favicons/snippet.png">
+
     <meta name="description" content="Текстовый процедурно-генерируемый симулятор детектива с возможностью установки веб-приложения на ваше устройство.">
     <meta name="keywords" content="игра, симулятор, детектив, процедурная генерация, текстовая игра">
     <meta name="robots" content="index, follow">
+
+    <link rel="icon" type="image/png" sizes="120x120" href="favicons/apple-touch-icon-120x120.png"> <!-- Для Яндекса -->
     <link rel="icon" type="image/png" sizes="192x192" href="favicons/android-chrome-192x192.png">
     <link rel="apple-touch-icon" href="favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
@@ -31,16 +47,16 @@
     </div>
     <div id="newGameModal" class="custom-modal">
         <div class="modal-content">
-            <span class = "close" onclick="closeNewGameModal()">&times;</span>
+            <span class="close" onclick="closeNewGameModal()">&times;</span>
             <h2>Сводки</h2>
-            <p id = "crimeText" style="text-align:left;"></p>
+            <p id="crimeText" style="text-align:left;"></p>
         </div>
     </div>
     <div id="endGameModal" class="custom-modal">
         <div class="modal-content">
-            <span class = "close" onclick="closeEndGameModal()">&times;</span>
+            <span class="close" onclick="closeEndGameModal()">&times;</span>
             <h2>Сводки</h2>
-            <p id = "crimeText_" style="text-align:left;"></p>
+            <p id="crimeText_" style="text-align:left;"></p>
         </div>
     </div>
     <h2>Доска расследований</h2>
@@ -62,6 +78,33 @@
             <center><label for="note-content">Содержание:</label></center>
             <center><textarea id="note-content" required></textarea><br></center>
             <center><button onclick="addNote()">Прикрепить</button></center>
+        </div>
+    </div>
+    <div id="achievement" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAchievementsModal()">&times;</span>
+            <h2>Новое достижение</h2>
+            <div id="achievementContent">
+                <!-- Тут будет контент!!! -->
+            </div>
+        </div>
+    </div>
+    <div id="achievement1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAchievements1Modal()">&times;</span>
+            <h2>Новое достижение</h2>
+            <div id="achievementContent1">
+                <!-- Тут будет контент!!! -->
+            </div>
+        </div>
+    </div>
+    <div id="achievement2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAchievements2Modal()">&times;</span>
+            <h2>Новое достижение</h2>
+            <div id="achievementContent2">
+                <!-- Тут будет контент!!! -->
+            </div>
         </div>
     </div>
     <div id="evidence-open-modal" class="modal">
@@ -113,81 +156,86 @@
                 <button onclick="addResident()">Добавить жителя</button>
             </div>
         </div>
-        <center><button class="restart" style="display:none" onclick="window.location.href=''">Сбросить игру</button></center>
     </div>
     <div class="actions container">
-        <button onclick="toggleSubMenu('crime-scene-submenu')">Осмотр места преступления</button>
-        <button onclick="toggleSubMenu('investigative-actions-submenu')">Розыскные мероприятия</button>
-        <button onclick="toggleAccuseMenu()">Обвинить убийцу</button>
-        <div id="crime-scene-submenu" class="submenu">
-            <button onclick="inspectBody()">Осмотр тела</button>
-            <button onclick="interviewingWitnesses()">Опрос свидетелей</button>
-            <button onclick="searchForEvidence()">Поиск улик на месте происшествия</button>
-            <button onclick="searchForTheCrimeWeapon()">Поиск орудия преступления</button>
-            <button onclick="expertise()">Узнать время убийства</button>
-            <button onclick="openVictimPhoneModal()">Прочитать диалоги жертвы</button>
-        </div>
-         <div id="victimPhoneModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeVictimPhoneModal()">&times;</span>
-                <h2>Диалоги жертвы</h2>
-                <div class="victim-phone-container">
-                    <div class="victim-phone-dialogs">
-                        <!-- Тут будет контент!!! -->
-                    </div>
-                    <div class="victim-phone-content">
-                        <!-- Тут будет контент!!! -->
+        <button onclick="saveGame()">Сохранить игру</button>
+        <button onclick="clearDatabase();window.location.href=''">Сбросить игру</button>
+    </div>
+    <div class="actions container">
+        <div class="actions container">
+            <button onclick="toggleSubMenu('crime-scene-submenu')">Осмотр места происшествия</button>
+            <button onclick="toggleSubMenu('investigative-actions-submenu')">Следственные действия</button>
+            <button onclick="toggleAccuseMenu()">Предъявление обвинения</button>
+            <div id="crime-scene-submenu" class="submenu">
+                <button onclick="inspectBody();expertise()">Судебно-медицинская экспертиза</button>
+                <button onclick="searchForEvidence();searchForTheCrimeWeapon()">Поиск улик</button>
+                <button onclick="searchForTheWeaponFingerprints()">Дактилоскопическая экспертиза орудия преступления</button>
+                <button onclick="searchForTraces()">Трасологическая экспертиза</button>
+                <button onclick="openVictimPhoneModal()">Компьютерно-техническая экспертиза</button>
+                <button onclick="interviewingWitnesses()">Опрос свидетелей</button>
+            </div>
+            <div id="victimPhoneModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeVictimPhoneModal()">&times;</span>
+                    <h2>Телефонные записи жертвы</h2>
+                    <div class="victim-phone-container">
+                        <div class="victim-phone-dialogs">
+                            <!-- Тут будет контент!!! -->
+                        </div>
+                        <div class="victim-phone-content">
+                            <!-- Тут будет контент!!! -->
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="investigative-actions-submenu" class="submenu">
-            <button onclick="inspectionVictimsResidence()">Осмотр места жительства жертвы</button>
-            <button onclick="toggleInterrogateMenu()">Вызвать жителя на допрос</button>
-            <button onclick="toggleAdminRequestMenu()">Создать запрос в администрацию локации</button>
-            <button onclick="toggleSurvRequestMenu()">Запросить записи с камер видеонаблюдения</button>
-            <button onclick="toggleReqResMenu()">Опознание людей с записей</button>
-        </div>
-        <div id="reqres-menu" class="submenu">
-            <select class="recordsOptions" style = "width: 75%;">
-                <!-- Тут будет контент!!! -->
-            </select>
-            <button onclick="recognizeResidents()">Послать записи</button>
-        </div>
-        <div id="interrogate-menu" class="submenu">
-            <select class="residentsOptions">
-                <!-- Тут будет контент!!! -->
-            </select>
-            <button onclick="toggleSubMenu('interrogation-actions-submenu')">Вызвать на допрос</button>
-            <div id="interrogation-actions-submenu" class="submenu">
-                <button onclick="takeFingerprints()">Снять отпечатки пальцев</button>
-                <button onclick="conductExternalExamination()">Провести внешний осмотр</button>
-                <button onclick="getFriendsAndEnemiesInfo()">Узнать сведения о друзьях и врагах</button>
-                <button onclick="askAboutVictimConnections()">Задать вопрос о связях жертвы</button>
-                <button onclick="getDailySchedule()">Узнать распорядок дня</button>
-                <button onclick="checkForAlibi()">Узнать, есть ли алиби</button>
-                <button onclick="getWorkplaceNHouse()">Узнать место жительства и место работы</button>
-                <button onclick="conductSearch()">Провести обыск</button>
+            <div id="investigative-actions-submenu" class="submenu">
+                <button onclick="inspectionVictimsResidence()">Осмотр места жительства жертвы</button>
+                <button onclick="toggleInterrogateMenu()">Допрос подозреваемого</button>
+                <button onclick="toggleAdminRequestMenu()">Запрос в администрацию</button>
+                <button onclick="toggleSurvRequestMenu()">Запрос записи с видеокамер</button>
+                <button onclick="toggleReqResMenu()">Видеотехническая экспертиза</button>
             </div>
-        </div>
-        <div id="admin-request-menu" class="submenu">
-            <select class="residentsOptionsL">
-                <!-- Тут будет контент!!! -->
-            </select>
-            <select class="locationsOptionsL">
-                <!-- Тут будет контент!!! -->
-            </select>
-            <button onclick="toggleSubMenu('admin-actions-submenu')">Создать запрос администрации</button>
-            <div id="admin-actions-submenu" class="submenu">
-                <button onclick="checkIfResidentWasPresentAtMurder()">Узнать, был ли житель во время убийства в этом месте</button>
-                <button onclick="askAboutFriendsAtWork()">Спросить по поводу друзей-коллег жителя</button>
+            <div id="reqres-menu" class="submenu">
+                <select class="recordsOptions" style="width: 75%;">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <button onclick="recognizeResidents()">Идентификация лиц на видеозаписях</button>
             </div>
-        </div>
-        <div id="surv-menu" class="submenu">
-            <select class="locationsSurvOptions" style = "width: 75%;">
-                <!-- Тут будет контент!!! -->
-            </select>
-            <button onclick="getSurveillanceCameraRecords()">Отправить запрос на счёт записей</button>
+            <div id="interrogate-menu" class="submenu">
+                <select class="residentsOptions">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <button onclick="toggleSubMenu('interrogation-actions-submenu')">Процесс допроса</button>
+                <div id="interrogation-actions-submenu" class="submenu">
+                    <button onclick="takeFingerprints()">Дактилоскопическая экспертиза</button>
+                    <button onclick="conductExternalExamination()">Проведение личного досмотра</button>
+                    <button onclick="getFriendsAndEnemiesInfo()">Выявление связей с друзьями и врагами</button>
+                    <button onclick="askAboutVictimConnections()">Расследование связей жертвы</button>
+                    <button onclick="getDailySchedule()">Изучение распорядка дня</button>
+                    <button onclick="checkForAlibi()">Установление алиби</button>
+                    <button onclick="getWorkplaceNHouse()">Установление места жительства и работы</button>
+                    <button onclick="conductSearch()">Проведение обыска</button>
+                </div>
+            </div>
+            <div id="admin-request-menu" class="submenu">
+                <select class="residentsOptionsL">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <select class="locationsOptionsL">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <button onclick="toggleSubMenu('admin-actions-submenu')">Формирование запроса в администрацию</button>
+                <div id="admin-actions-submenu" class="submenu">
+                    <button onclick="checkIfResidentWasPresentAtMurder()">Проверка нахождения жителя в указанное время в локации</button>
+                    <button onclick="askAboutFriendsAtWork()">Запрос информации о коллегах жителя</button>
+                </div>
+            </div>
+            <div id="surv-menu" class="submenu">
+                <select class="locationsSurvOptions" style="width: 75%;">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <button onclick="getSurveillanceCameraRecords()">Запрос на получение записи с видеокамер</button>
+            </div>
         </div>
         <div id="accuse-menu" class="submenu">
             <select class="residentsAccuse">
@@ -299,6 +347,24 @@
         <button onclick="showHint()">Подсказка</button><br>
         <button onclick="openAboutModal()">Об игре</button>
     </div>
+    <div class="actions container">
+        <button onclick="openStatisticsModal()">Статистика</button>
+    </div>
+    <div id="statistics" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeStatisticsModal()">&times;</span>
+            <h2>Статистика</h2>
+            <ul>
+                <li id="allStats"></li>
+                <li id="full"></li>
+                <li id="half"></li>
+                <li id="unsolved"></li>
+            </ul>
+            <div id="achievements">
+                <!-- Тут будет контент!!! -->
+            </div>
+        </div>
+    </div>
     <div id="hintBox" class="hint-box">
         <!-- Тут будет контент!!! -->
     </div>
@@ -390,16 +456,21 @@
                 <li>Интерактивные места преступлений и допросы подозреваемых.</li>
                 <li>Глубокая система следствия с возможностью принятия решений.</li>
                 <li>Удобный текстовый интерфейс в связке с приятным оформлением.</li>
+                <li>Система сохранения игры.</li>
+                <li>Статистика и достижения.</li>
             </ul>
             <h3 style="text-align:center;">Разработчик:</h3>
-            <p style="text-align:left;">Игра создана одним человеком с ником Vyachiq (Вячеслав Пчеленок). Обо мне можно узнать <a href = "https://vyachikx.github.io">здесь</a>.</p>
+            <p style="text-align:left;">Игра создана одним человеком с ником Vyachiq (Вячеслав Пчеленок). Обо мне можно узнать <a href="https://vyachikx.github.io">здесь</a>.</p>
             <h3 style="text-align:center;">Версия игры:</h3>
             <p style="text-align:left;">0.1 (а) - первый альфа-релиз.</p>
-            <p style="text-align:left;">0.2 (а) - исправление ошибок.</p>
-            <p style="text-align:left;">0.3 (а) - добавлены сводки перед началом игры, а также мелкие исправления.</p>
+            <p style="text-align:left;">0.2 (а) - исправлены ошибки.</p>
+            <p style="text-align:left;">0.3 (а) - добавлены сводки перед началом игры, а также исправлены мелкие ошибки.</p>
             <p style="text-align:left;">0.31 (а) - добавлены сводки после окончания игры и небольшие косметические изменения.</p>
             <p style="text-align:left;">0.4 (а) - добавлен осмотр записей с камер видеонаблюдения.</p>
             <p style="text-align:left;">0.5 (а) - добавлена возможность просматривать диалоги жертвы.</p>
+            <p style="text-align:left;">0.6 (а) - добавлено сохранение игры.</p>
+            <p style="text-align:left;" onclick='addAchievementAndShowModal("Разработчик", "Вы нашли cекретное достижение.")'>0.7 (а) - добавлена статистика и достижения.</p>
+            <p style="text-align:left;">0.8 (а) - обновлены названия кнопок.</p>
         </div>
     </div>
     <div class="music-controls">
@@ -407,6 +478,8 @@
             <img id="music-toggle" src="src/music_off.png" alt="Music" onclick="toggleMusic()">
         </div>
     </div>
+    <script src="script.js"></script>
+    <script src="game.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             setTimeout(function () {
@@ -419,6 +492,11 @@
         });
     </script>
     <script>
+        checkAndLoadState();
+        setupCaseStatisticsDatabase();
+        setupAchievementsDatabase();
+    </script>
+    <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js').then(registration => {
@@ -429,8 +507,6 @@
             });
         }
     </script>
-    <script src="script.js"></script>
-    <script src="game.js"></script>
 </body>
 
 </html>
