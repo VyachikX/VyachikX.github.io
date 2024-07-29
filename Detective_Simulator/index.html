@@ -120,7 +120,7 @@
     <div class="suspect-dossier container">
         <!-- Тут будет контент!!! -->
     </div>
-    <h2>События</h2>
+    <h2>События игры</h2>
     <div class="logs container">
         <!-- Тут будет контент!!! -->
     </div>
@@ -133,6 +133,11 @@
             Ключ генерации: <input placeholder="ключ" class="seedGen">
             <button onclick="loadCity()">Загрузить город</button>
             <button onclick="toggleSubMenu('addNewResident')">Добавить уникального жителя</button>
+            <p>Режим игры:</p>
+            <select id = "gameMode">
+                <option>Простой</option>
+                <option>Сложный</option>
+            </select>
             <div id="addNewResident" class="submenu">
                 <h3>Добавить уникального жителя <br> (экспериментальная функция)</h3>
                 Имя: <input type="text" id="residentName"><br>
@@ -202,10 +207,11 @@
                 <button onclick="recognizeResidents()">Идентификация лиц на видеозаписях</button>
             </div>
             <div id="interrogate-menu" class="submenu">
+                <input id="filterResidents" type="text" placeholder="Введите имя жителя...">
                 <select class="residentsOptions">
                     <!-- Тут будет контент!!! -->
                 </select>
-                <button onclick="toggleSubMenu('interrogation-actions-submenu')">Процесс допроса</button>
+                <button onclick="if(document.getElementsByClassName('residentsOptions')[0].value != 'Нет совпадений' && document.getElementsByClassName('residentsOptions')[0].value != '') {toggleSubMenu('interrogation-actions-submenu')}">Процесс допроса</button>
                 <div id="interrogation-actions-submenu" class="submenu">
                     <button onclick="takeFingerprints()">Дактилоскопическая экспертиза</button>
                     <button onclick="conductExternalExamination()">Проведение личного досмотра</button>
@@ -218,6 +224,8 @@
                 </div>
             </div>
             <div id="admin-request-menu" class="submenu">
+                <input id="filterResidentsL" type="text" placeholder="Введите имя жителя...">
+                <input id="filterLocationsL" type="text" placeholder="Введите локацию...">
                 <select class="residentsOptionsL">
                     <!-- Тут будет контент!!! -->
                 </select>
@@ -238,6 +246,7 @@
             </div>
         </div>
         <div id="accuse-menu" class="submenu">
+            <input id="filterResidentsA" type="text" placeholder="Введите имя жителя...">
             <select class="residentsAccuse">
                 <!-- Тут будет контент!!! -->
             </select>
@@ -474,6 +483,7 @@
             <p style="text-align:left;">0.8 (а) - обновлены названия кнопок.</p>
             <p style="text-align:left;">0.81 (а) - исправлены ошибки отображения.</p>
             <p style="text-align:left;">0.82 (а) - исправлены ошибки.</p>
+            <p style="text-align:left;">0.9 (а) - добавлен новый режим игры, а также фильтрация выпадающих списков.</p>
         </div>
     </div>
     <div class="music-controls">
@@ -498,6 +508,14 @@
         checkAndLoadState();
         setupCaseStatisticsDatabase();
         setupAchievementsDatabase();
+    </script>
+    <script>
+        document.addEventListener('change', function(event) {
+            if (event.target.classList.contains('evidence-checkbox')) {
+                const noteId = event.target.dataset.noteId;
+                localStorage.setItem(noteId, event.target.checked);
+            }
+        });
     </script>
     <script>
         if ('serviceWorker' in navigator) {
