@@ -167,11 +167,9 @@
         <button onclick="clearDatabase();window.location.href=''">Сбросить игру</button>
     </div>
     <div class="actions container">
-        <div class="actions container">
-            <button onclick="toggleSubMenu('crime-scene-submenu')">Осмотр места происшествия</button>
-            <button onclick="toggleSubMenu('investigative-actions-submenu')">Следственные действия</button>
-            <button onclick="toggleAccuseMenu()">Предъявление обвинения</button>
-            <div id="crime-scene-submenu" class="submenu">
+    <div class="actions container">
+        <button onclick="toggleSubMenu('crime-scene-submenu')">Осмотр места происшествия</button>
+        <div id="crime-scene-submenu" class="submenu">
                 <button onclick="inspectBody();expertise()">Судебно-медицинская экспертиза</button>
                 <button onclick="searchForEvidence();searchForTheCrimeWeapon()">Поиск улик</button>
                 <button onclick="searchForTheWeaponFingerprints()">Дактилоскопическая экспертиза орудия преступления</button>
@@ -179,21 +177,10 @@
                 <button onclick="openVictimPhoneModal()">Компьютерно-техническая экспертиза</button>
                 <button onclick="interviewingWitnesses()">Опрос свидетелей</button>
             </div>
-            <div id="victimPhoneModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeVictimPhoneModal()">&times;</span>
-                    <h2>Телефонные записи жертвы</h2>
-                    <div class="victim-phone-container">
-                        <div class="victim-phone-dialogs">
-                            <!-- Тут будет контент!!! -->
-                        </div>
-                        <div class="victim-phone-content">
-                            <!-- Тут будет контент!!! -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="investigative-actions-submenu" class="submenu">
+    </div>
+    <div class="actions container">
+        <button onclick="toggleSubMenu('investigative-actions-submenu')">Следственные действия</button>
+        <div id="investigative-actions-submenu" class="submenu">
                 <button onclick="inspectionVictimsResidence()">Осмотр места жительства жертвы</button>
                 <button onclick="toggleInterrogateMenu()">Допрос подозреваемого</button>
                 <button onclick="toggleAdminRequestMenu()">Запрос в администрацию</button>
@@ -246,25 +233,42 @@
                 <button onclick="getSurveillanceCameraRecords()">Запрос на получение записи с видеокамер</button>
             </div>
         </div>
-        <div id="accuse-menu" class="submenu">
-            <input id="filterResidentsA" type="text" placeholder="Введите имя жителя...">
-            <select class="residentsAccuse">
-                <!-- Тут будет контент!!! -->
-            </select>
-            <select class="weaponsAccuse">
-                <!-- Тут будет контент!!! -->
-            </select>
-            <select class="motiveAccuse">
-                <!-- Тут будет контент!!! -->
-            </select>
-            <button onclick="accuseResident()">Обвинить жителя</button>
-        </div>
-        <div id="endGameModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeEndGameModal()">&times;</span>
-                <h2 id="endGameHeader"></h2>
-                <p id="endGameMessage"></p>
+        <div class="actions container">
+            <button onclick="toggleAccuseMenu()">Предъявление обвинения</button>
+            <div id="accuse-menu" class="submenu">
+                <input id="filterResidentsA" type="text" placeholder="Введите имя жителя...">
+                <select class="residentsAccuse">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <select class="weaponsAccuse">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <select class="motiveAccuse">
+                    <!-- Тут будет контент!!! -->
+                </select>
+                <button onclick="accuseResident()">Обвинить жителя</button>
             </div>
+        </div>
+    </div>
+    <div id="victimPhoneModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeVictimPhoneModal()">&times;</span>
+            <h2>Телефонные записи жертвы</h2>
+            <div class="victim-phone-container">
+                <div class="victim-phone-dialogs">
+                    <!-- Тут будет контент!!! -->
+                </div>
+                <div class="victim-phone-content">
+                    <!-- Тут будет контент!!! -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="endGameModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEndGameModal()">&times;</span>
+            <h2 id="endGameHeader"></h2>
+            <p id="endGameMessage"></p>
         </div>
     </div>
     <div class="actions container">
@@ -487,6 +491,7 @@
             <p style="text-align:left;">0.9 (а) - добавлен новый режим игры, а также фильтрация выпадающих списков.</p>
             <p style="text-align:left;">0.91 (а) - реализована двусторонняя взаимосвязь жителей.</p>
             <p style="text-align:left;">0.92 (а) - небольшие исправления.</p>
+            <p style="text-align:left;">0.93 (а) - изменён блок кнопок.</p>
         </div>
     </div>
     <div class="music-controls">
