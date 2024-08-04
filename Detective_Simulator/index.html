@@ -134,7 +134,7 @@
             <button onclick="loadCity()">Загрузить город</button>
             <button onclick="toggleSubMenu('addNewResident')">Добавить уникального жителя</button>
             <p>Режим игры:</p>
-            <select id = "gameMode">
+            <select id="gameMode">
                 <option>Простой</option>
                 <option>Сложный</option>
             </select>
@@ -167,9 +167,9 @@
         <button onclick="clearDatabase();window.location.href=''">Сбросить игру</button>
     </div>
     <div class="actions container">
-    <div class="actions container">
-        <button onclick="toggleSubMenu('crime-scene-submenu')">Осмотр места происшествия</button>
-        <div id="crime-scene-submenu" class="submenu">
+        <div class="actions container">
+            <button onclick="toggleSubMenu('crime-scene-submenu')">Осмотр места происшествия</button>
+            <div id="crime-scene-submenu" class="submenu">
                 <button onclick="inspectBody();expertise()">Судебно-медицинская экспертиза</button>
                 <button onclick="searchForEvidence();searchForTheCrimeWeapon()">Поиск улик</button>
                 <button onclick="searchForTheWeaponFingerprints()">Дактилоскопическая экспертиза орудия преступления</button>
@@ -177,10 +177,10 @@
                 <button onclick="openVictimPhoneModal()">Компьютерно-техническая экспертиза</button>
                 <button onclick="interviewingWitnesses()">Опрос свидетелей</button>
             </div>
-    </div>
-    <div class="actions container">
-        <button onclick="toggleSubMenu('investigative-actions-submenu')">Следственные действия</button>
-        <div id="investigative-actions-submenu" class="submenu">
+        </div>
+        <div class="actions container">
+            <button onclick="toggleSubMenu('investigative-actions-submenu')">Следственные действия</button>
+            <div id="investigative-actions-submenu" class="submenu">
                 <button onclick="inspectionVictimsResidence()">Осмотр места жительства жертвы</button>
                 <button onclick="toggleInterrogateMenu()">Допрос подозреваемого</button>
                 <button onclick="toggleAdminRequestMenu()">Запрос в администрацию</button>
@@ -522,7 +522,7 @@
         setupAchievementsDatabase();
     </script>
     <script>
-        document.addEventListener('change', function(event) {
+        document.addEventListener('change', function (event) {
             if (event.target.classList.contains('evidence-checkbox')) {
                 const noteId = event.target.dataset.noteId;
                 localStorage.setItem(noteId, event.target.checked);
