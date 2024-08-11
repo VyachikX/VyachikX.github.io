@@ -410,14 +410,11 @@ footer {
     }
 }
 
-/* Скрыть загрузочный экран после задержки */
 body.loaded .loader {
     animation: fadeOut 1s ease-out;
     animation-delay: 5s;
-    /* Задержка перед началом анимации */
     opacity: 0;
     pointer-events: none;
-    /* Предотвращает клики на загрузочный экран */
 }
 
 .loading {
@@ -590,7 +587,6 @@ a {
 }
 
 
-/* Новые стили для модального окна осмотра мобильного телефона жертвы */
 .victim-phone-container {
     display: flex;
     flex-direction: row;
@@ -619,22 +615,18 @@ a {
     max-height: 400px;
 }
 
-/* Добавьте другие стили по необходимости */
-
 .message {
     padding: 10px;
     border-radius: 5px;
     margin: 5px 0;
 }
 
-/* Align messages from the victim to the right */
 .message.victim {
     background-color: #e0f7fa;
     align-self: flex-end;
     color: black;
 }
 
-/* Align messages from the interlocutor to the left */
 .message.interlocutor {
     background-color: #f0f4c3;
     align-self: flex-start;
