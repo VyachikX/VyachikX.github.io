@@ -137,6 +137,7 @@
             <select id="gameMode">
                 <option>Простой</option>
                 <option>Сложный</option>
+                <option>Необычный</option>
             </select>
             <div id="addNewResident" class="submenu">
                 <h3>Добавить уникального жителя <br> (экспериментальная функция)</h3>
@@ -167,7 +168,7 @@
         <button onclick="clearDatabase();window.location.href=''">Сбросить игру</button>
     </div>
     <div class="actions container">
-        <div class="actions container">
+        <div class="actions container" id="action_container1">
             <button onclick="toggleSubMenu('crime-scene-submenu')">Осмотр места происшествия</button>
             <div id="crime-scene-submenu" class="submenu">
                 <button onclick="inspectBody();expertise()">Судебно-медицинская экспертиза</button>
@@ -178,7 +179,7 @@
                 <button onclick="interviewingWitnesses()">Опрос свидетелей</button>
             </div>
         </div>
-        <div class="actions container">
+        <div class="actions container" id="action_container2">
             <button onclick="toggleSubMenu('investigative-actions-submenu')">Следственные действия</button>
             <div id="investigative-actions-submenu" class="submenu">
                 <button onclick="inspectionVictimsResidence()">Осмотр места жительства жертвы</button>
@@ -233,7 +234,7 @@
                 <button onclick="getSurveillanceCameraRecords()">Запрос на получение записи с видеокамер</button>
             </div>
         </div>
-        <div class="actions container">
+        <div class="actions container" id="action_container3">
             <button onclick="toggleAccuseMenu()">Предъявление обвинения</button>
             <div id="accuse-menu" class="submenu">
                 <input id="filterResidentsA" type="text" placeholder="Введите имя жителя...">
@@ -427,6 +428,27 @@
                     </ul>
                 </li>
             </ol>
+            <h2>Режимы игры:</h2>
+            <ul>
+                <li>
+                    <strong>Простой</strong>:
+                    <ul>
+                        <li>Это обычный режим, где вы можете собирать улики и делать выводы без дополнительных условий.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Сложный</strong>:
+                    <ul>
+                        <li>Этот режим добавляет элемент сложности, требующий выбор зацепок на доске расследования. Вам нужно будет обосновывать свои выводы, используя ключевые заметки.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Необычный</strong>:
+                    <ul>
+                        <li>В этом режиме некоторое количество зацепок генерируется случайным образом, и вам недоступны никакие экспертизы. Вам нужно будет установить имя убийцы, орудие преступления и мотив.</li>
+                    </ul>
+                </li>
+            </ul>
             <h2>Советы для успешного расследования:</h2>
             <ul>
                 <li>
@@ -495,6 +517,7 @@
                 <p style="text-align:left;">0.92 (а) - небольшие исправления.</p>
                 <p style="text-align:left;">0.93 (а) - изменён блок кнопок.</p>
                 <p style="text-align:left;">0.94 (а) - исправление ошибок.</p>
+                <p style="text-align:left;">1.0 (б) - добавлен новый режим игры.</p>
             </details>
         </div>
     </div>
