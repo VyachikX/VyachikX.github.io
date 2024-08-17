@@ -632,3 +632,7 @@ a {
     align-self: flex-start;
     color: black;
 }
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
