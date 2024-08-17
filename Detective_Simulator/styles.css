@@ -534,10 +534,9 @@ ul {
 }
 
 *:not(#inputText){
-    -webkit-tap-highlight-color: transparent; 
-    -webkit-touch-callout: none;             
-    -moz-tap-highlight-color: transparent;
-    -ms-tap-highlight-color: transparent;   
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     touch-action: manipulation;
     user-select: none;
 }
