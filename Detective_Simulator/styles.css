@@ -533,12 +533,13 @@ ul {
     z-index: 1000;
 }
 
-* {
+*:not(#inputText){
     -webkit-tap-highlight-color: transparent; 
     -webkit-touch-callout: none;             
     -moz-tap-highlight-color: transparent;
     -ms-tap-highlight-color: transparent;   
     touch-action: manipulation;
+    user-select: none;
 }
 
 a {
