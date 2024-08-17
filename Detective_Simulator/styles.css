@@ -534,7 +534,11 @@ ul {
 }
 
 * {
-      touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent; 
+    -webkit-touch-callout: none;             
+    -moz-tap-highlight-color: transparent;
+    -ms-tap-highlight-color: transparent;   
+    touch-action: manipulation;
 }
 
 a {
@@ -631,8 +635,4 @@ a {
     background-color: #f0f4c3;
     align-self: flex-start;
     color: black;
-}
-
-* {
-    -webkit-tap-highlight-color: transparent;
 }
