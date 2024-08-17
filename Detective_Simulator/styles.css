@@ -533,7 +533,7 @@ ul {
     z-index: 1000;
 }
 
-*:not(#inputText){
+* {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
