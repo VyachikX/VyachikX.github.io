@@ -518,6 +518,7 @@
                 <p style="text-align:left;">0.93 (а) - изменён блок кнопок.</p>
                 <p style="text-align:left;">0.94 (а) - исправление ошибок.</p>
                 <p style="text-align:left;">1.0 (б) - добавлен новый режим игры.</p>
+                <p style="text-align:left;">1.1 (б) - небольшие изменения в коде: изменён алгоритм генерации ключа, добавлены новые функции.</p>
             </details>
         </div>
     </div>
@@ -543,6 +544,9 @@
         checkAndLoadState();
         setupCaseStatisticsDatabase();
         setupAchievementsDatabase();
+        disableButtonsInBlockById("action_container1");
+        disableButtonsInBlockById("action_container2");
+        disableButtonsInBlockById("action_container3");
     </script>
     <script>
         document.addEventListener('change', function (event) {
