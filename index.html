@@ -295,35 +295,21 @@
                     </div>
                 </div>
             </section>
-            <section id="contacts" class="contacts-container">
-                <h1>Контакты</h1>
-                <ul class="contacts-list">
-                    <li class="contact-item">
-                        <a href="https://t.me/vyachiq" target="_blank">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
-                            Telegram: @vyachiq
-                        </a>
-                    </li>
-                    <li class="contact-item">
-                        <a href="https://vk.com/vyachiq" target="_blank">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/VK.com-logo.svg" alt="VK">
-                            VK: @vyachiq
-                        </a>
-                    </li>
-                    <li class="contact-item">
-                        <a href="https://lichess.org/@/VyachikChess" target="_blank">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Lichess_Logo.svg" alt="Lichess">
-                            Lichess: VyachikChess
-                        </a>
-                    </li>
-                    <li class="contact-item">
-                        <a href="https://github.com/VyachikX" target="_blank">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub">
-                            GitHub: VyachikX
-                        </a>
-                    </li>
-                </ul>
-            </section>
+            <h1>Комментарии</h1>
+            <section id="disqus_thread"></section>
+                <script>
+                    var disqus_config = function () {
+                    this.page.url = window.location.href; 
+                    this.page.identifier = "test";
+                    };
+                    (function() {
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://vyachiq.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         </main>
         <footer>
             <p>&copy; Vyachik, <br> 2024</p>
@@ -341,6 +327,7 @@
         <img src="src/music_off.png" alt="Music Control">
     </div>
     <script src="script.js"></script>
+    <script id="dsq-count-scr" src="//vyachiq.disqus.com/count.js" async></script>
 </body>
 
 </html>
